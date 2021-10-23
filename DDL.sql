@@ -41,7 +41,7 @@ CREATE TABLE Veterinarians(
 	employeeID INTEGER PRIMARY KEY, 
 	FOREIGN KEY (employeeID) REFERENCES Employees(employeeID) ON DELETE CASCADE);	
 
--- TODO
+-- TODO Duy and Jessica
 CREATE TABLE Enclosures(
 	enclosureID INTEGER PRIMARY KEY
 );
