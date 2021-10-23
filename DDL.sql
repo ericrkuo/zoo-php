@@ -160,26 +160,26 @@ INSERT INTO Animals(animalID) VALUES(4);
 INSERT INTO Animals(animalID) VALUES(5); 
 
 --Employees
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(1  , '18853 41st Ave, Vancouver B.C'         , 'Benjamin' , 'Kowalewicz'  , 'benk33@gmail.com'             , '778-996-3324' , 333908767  , '16-DEC-1975');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(2  , '14456 Acorn Rd., Langley B.C'          , 'Ian'      , 'Dsa'         , 'iandsa@hotmail.com'           , '604-333-1212' , 333444555  , '31-OCT-1975');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(3  , '5555 Fern St., Burnaby B.C'            , 'Aaron'    , 'Solowoniuk'  , 'aaronsolowoniuk@gmail.com'    , '778-090-2323' , 767676799  , '21-NOV-1974');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(4  , '4661 HollyBerry Rd., Richmond, B.C'    , 'Jonathan' , 'Gallant'     , 'jonnygee222@gmail.com'        , '778-999-5533' ,  876456333 , '23-JUL-1976');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(5  , '4546 Alexis St., Richmond, B.C'        , 'Jordan'   , 'Hastings'    , 'jhastings23@gmail.com'        , '778-665-8778' , 199298090  , '15-MAR-1982');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(6  , '18853 55A Ave., Surrey B.C'            , 'Jessica'  , 'Bator'       , 'jkbator333@gmail.com'         , '778-994-2633' , 197690900  , '24-MAR-2001');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(7  , '18894 50th Ave,. Surrey, B.C'          , 'Sara'     , 'Marshall'    , 'saramarshall@student.ubc.ca'  , '778-558-8212' , 197788769  , '26-DEC-2001');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(8  , '8494 Pecan St., Vancouver B.C'         , 'Zahra'    , 'Raza'        , 'zahraza@gmail.com'            , '780-881-4131' , 197842425  , '31-JUL-2001');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(9  , '18852 52nd Ave., Surrey, B.C'          , 'Alex'     , 'Hawk'        , 'alexhawk@student.ubc.ca'      , '778-847-1469' , 197962350  , '23-OCT-2001');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(10 , '18859 55A ave., Surrey, B.C'           , 'Kelly'    , 'Ye'          , 'agoddexx@hotmail.com'         , '778-909-8787' , 198083235  , '23-JAN-2001');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(11 , '6545 60th Ave., Surrey, B.C'           , 'Faye'     , 'Marwick'     , 'faye.ay@gmail.com'            , '778-666-2241' , 198165455  , '12-FEB-2001');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(12 , '7992 Tribia Lane., Coquitlam, B.C'     , 'John'     , 'Frusciante'  , 'jfguitar@gmail.com'           , '604-789-9494' , 199102020  , '5-MAR-1970');   
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(13 , '6969 Purple St., Vancouver, B.C'       , 'Flea'     , NULL          , 'fleab@gmail.com'              , '604-574-4577' , 199188887  , '16-OCT-1962');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(14 , '7676 Venice St., Langley, B.C'         , 'Chad'     , 'Smith'       , 'thechadsmith@gmail.com'       , '604-989-4576' , 199140404  , '25-OCT-1961');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(15 , '19984  California Rd., Vancouver, B.C' , 'Anthony'  , 'Kiedis'      , 'akiedis6969@gmail.com'        , '604-737-4203' , 199133226  , '01-NOV-1962');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(16 , '7999 Tribia Lane., Coquitlam, B.C'     , 'Josh'     , 'Klinghoffer' , 'jkling55@gmail.com'           , '778-002-3242' ,199109090   , '03-OCT-1979');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(17 , '12001 Sad St., Burnaby, B.C'           , 'Thom'     , 'Yorke'       , 'tyorkeradio@outlook.com'      , '604-604-0000' , 199300120  , '07-OCT-1968');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(18 , '7878 Skater St., Surrey, B.C'          , 'Avril'    , 'Lavigne'     , 'avrilavigne@hotmail.com'      , '778-778-7777' , 199412312  , '27-SEP-1984');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(19 , '5564 Fever Rd., Surrey, B.C'           , 'Jason'    , 'Butler'      , 'jasonaalonbutler42@gmail.com' , '778-020-3411' , 199509134  , '17-JUL-1985');  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(20 , '10098 English Rd., Langley, B.C'       , 'Damon'    , 'Albarn'      , 'damonboy@outlook.com'         , '984-009-2727' , 199612300  , '23-MAR-1968');  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(1  , '18853 41st Ave, Vancouver B.C'         , 'Benjamin' , 'Kowalewicz'  , 'benk33@gmail.com'             , '778-996-3324' , 333908767  , ((TO_DATE('1979-02-01'  , 'yyyy/mm/dd HH24:MI'))));
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(2  , '14456 Acorn Rd., Langley B.C'          , 'Ian'      , 'Dsa'         , 'iandsa@hotmail.com'           , '604-333-1212' , 333444555  , ((TO_DATE('1965-03-11'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(3  , '5555 Fern St., Burnaby B.C'            , 'Aaron'    , 'Solowoniuk'  , 'aaronsolowoniuk@gmail.com'    , '778-090-2323' , 767676799  , ((TO_DATE('2000-08-14'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(4  , '4661 HollyBerry Rd., Richmond, B.C'    , 'Jonathan' , 'Gallant'     , 'jonnygee222@gmail.com'        , '778-999-5533' , 876456333  , ((TO_DATE('1935-07-19'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(5  , '4546 Alexis St., Richmond, B.C'        , 'Jordan'   , 'Hastings'    , 'jhastings23@gmail.com'        , '778-665-8778' , 199298090  , ((TO_DATE('1992-11-13'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(6  , '18853 55A Ave., Surrey B.C'            , 'Jessica'  , 'Bator'       , 'jkbator333@gmail.com'         , '778-994-2633' , 197690900  , ((TO_DATE('1960-05-19'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(7  , '18894 50th Ave,. Surrey, B.C'          , 'Sara'     , 'Marshall'    , 'saramarshall@student.ubc.ca'  , '778-558-8212' , 197788769  , ((TO_DATE('1996-02-03'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(8  , '8494 Pecan St., Vancouver B.C'         , 'Zahra'    , 'Raza'        , 'zahraza@gmail.com'            , '780-881-4131' , 197842425  , ((TO_DATE('1993-09-30'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(9  , '18852 52nd Ave., Surrey, B.C'          , 'Alex'     , 'Hawk'        , 'alexhawk@student.ubc.ca'      , '778-847-1469' , 197962350  , ((TO_DATE('1993-04-13'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(10 , '18859 55A ave., Surrey, B.C'           , 'Kelly'    , 'Ye'          , 'agoddexx@hotmail.com'         , '778-909-8787' , 198083235  , ((TO_DATE('1983-03-16'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(11 , '6545 60th Ave., Surrey, B.C'           , 'Faye'     , 'Marwick'     , 'faye.ay@gmail.com'            , '778-666-2241' , 198165455  , ((TO_DATE('1972-04-22'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(12 , '7992 Tribia Lane., Coquitlam, B.C'     , 'John'     , 'Frusciante'  , 'jfguitar@gmail.com'           , '604-789-9494' , 199102020  , ((TO_DATE('1968-05-18'  , 'yyyy/mm/dd HH24:MI'))));   
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(13 , '6969 Purple St., Vancouver, B.C'       , 'Flea'     , NULL          , 'fleab@gmail.com'              , '604-574-4577' , 199188887  , ((TO_DATE('1960-04-13'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(14 , '7676 Venice St., Langley, B.C'         , 'Chad'     , 'Smith'       , 'thechadsmith@gmail.com'       , '604-989-4576' , 199140404  , ((TO_DATE('1952-01-15'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(15 , '19984  California Rd., Vancouver, B.C' , 'Anthony'  , 'Kiedis'      , 'akiedis6969@gmail.com'        , '604-737-4203' , 199133226  , ((TO_DATE('1993-01-06'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(16 , '7999 Tribia Lane., Coquitlam, B.C'     , 'Josh'     , 'Klinghoffer' , 'jkling55@gmail.com'           , '778-002-3242' , 199109090  , ((TO_DATE('1999-08-20'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(17 , '12001 Sad St., Burnaby, B.C'           , 'Thom'     , 'Yorke'       , 'tyorkeradio@outlook.com'      , '604-604-0000' , 199300120  , ((TO_DATE('1989-09-01'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(18 , '7878 Skater St., Surrey, B.C'          , 'Avril'    , 'Lavigne'     , 'avrilavigne@hotmail.com'      , '778-778-7777' , 199412312  , ((TO_DATE('1945-03-08'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(19 , '5564 Fever Rd., Surrey, B.C'           , 'Jason'    , 'Butler'      , 'jasonaalonbutler42@gmail.com' , '778-020-3411' , 199509134  , ((TO_DATE('1941-07-15'  , 'yyyy/mm/dd HH24:MI'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(20 , '10098 English Rd., Langley, B.C'       , 'Damon'    , 'Albarn'      , 'damonboy@outlook.com'         , '984-009-2727' , 199612300  , ((TO_DATE('1986-10-11'  , 'yyyy/mm/dd HH24:MI'))));  
 
 -- Feeders
 INSERT INTO Feeders(employeeID) VALUES(1); 
@@ -309,11 +309,11 @@ INSERT INTO Reserve (eventID , visitorID) VALUES (4 ,1);
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 ,5); 
 
 -- HostedBy
-INSERT INTO HostedBy(eventID , trainerID) VALUES (1 ,1); 
-INSERT INTO HostedBy(eventID , trainerID) VALUES (2 ,1); 
-INSERT INTO HostedBy(eventID , trainerID) VALUES (3 ,1); 
-INSERT INTO HostedBy(eventID , trainerID) VALUES (4 ,1); 
-INSERT INTO HostedBy(eventID , trainerID) VALUES (1 ,5); 
+INSERT INTO HostedBy(eventID , trainerID) VALUES (1 ,6);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (2 ,7);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (3 ,8);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (4 ,9);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (1 ,10);
 
 --ResponsibleFor
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(11 , 1); 
@@ -326,4 +326,3 @@ INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(13 , 3);
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(14 , 4); 
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(15 , 5); 
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(11 , 5);
-INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(12 , 5);
