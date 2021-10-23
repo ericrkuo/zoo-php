@@ -5,6 +5,16 @@ CREATE TABLE Animals(
     animalID INTEGER PRIMARY KEY
 );
 
+-- TODO normalize
+CREATE TABLE Breeds(
+	breedID INTEGER PRIMARY KEY,
+	breed CHAR(50),
+	species CHAR(50),
+	animalGroup CHAR(50),
+	facts CHAR(1000),
+	status CHAR(50)
+);
+
 CREATE TABLE Employees(
 	employeeID INTEGER PRIMARY KEY,
 	address VARCHAR(50) NOT NULL,
@@ -22,7 +32,6 @@ CREATE TABLE Feeders(
 CREATE TABLE Trainers(
 	employeeID INTEGER PRIMARY KEY, 
 	FOREIGN KEY (employeeID) REFERENCES Employees(employeeID) ON DELETE CASCADE);
-
 
 CREATE TABLE Keepers(
 	employeeID INTEGER PRIMARY KEY, 
@@ -159,7 +168,29 @@ INSERT INTO Animals(animalID) VALUES(3);
 INSERT INTO Animals(animalID) VALUES(4); 
 INSERT INTO Animals(animalID) VALUES(5); 
 
---Employees
+-- Breed
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (1  , 'Grizzly bear'                , 'Ursus arctos'               , 'Vombatus ursinus'            , 'Peritoneal abscess'       , 'Canellas');     
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (2  , 'Jackal, indian'              , 'Canis aureus'               , 'Aquila chrysaetos'           , 'Dislocation sternum-open' , 'Benois');       
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (3  , 'American alligator'          , 'Alligator mississippiensis' , 'Choloepus hoffmani'          , 'Hit by train-employee'    , 'Windley');      
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (4  , 'Toucan, white-throated'      , 'Ramphastos tucanus'         , 'Cereopsis novaehollandiae'   , 'Anal sphincter tear-del'  , 'Leynagh');      
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (5  , 'Monkey, red howler'          , 'Alouatta seniculus'         , 'Colobus guerza'              , 'Pulmon circulat dis NOS'  , 'Ancketill');    
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (6  , 'Cougar'                      , 'Felis concolor'             , 'Papio cynocephalus'          , 'Vertigo'                  , 'Warhurst');     
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (7  , 'Racer, blue'                 , 'Coluber constrictor foxii'  , 'Neotis denhami'              , 'Blood inf dt cen ven cth' , 'Dowson');       
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (8  , 'Pacific gull'                , 'Gabianus pacificus'         , 'Morelia spilotes variegata'  , 'Neonat jaund in oth dis'  , 'Jaggard');      
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (9  , 'Wallaby, whip-tailed'        , 'Macropus parryi'            , 'Caiman crocodilus'           , 'Postabortion gu infect'   , 'Amort');        
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (10 , 'Lilac-breasted roller'       , 'Coracias caudata'           , 'Alcelaphus buselaphus cokii' , 'Causalgia lower limb'     , 'Densham');      
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (11 , 'Dove, rock'                  , 'Columba livia'              , 'Cyrtodactylus louisiadensis' , 'Pulmon TB NOS-micro dx'   , 'Killingworth'); 
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (12 , 'Cat, ringtail'               , 'Bassariscus astutus'        , 'Butorides striatus'          , 'War injury:bullet NEC'    , 'Sayse');        
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (13 , 'Gerbil (unidentified)'       , 'Gerbillus sp.'              , 'Pteropus rufus'              , 'Fam hx genet dis carrier' , 'de Savery');    
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (14 , 'Tailless tenrec'             , 'Tenrec ecaudatus'           , 'Petaurus norfolcensis'       , 'Food/vomit pneumonitis'   , 'Kenner');       
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (15 , 'Wallaby, bennett''s'         , 'Macropus rufogriseus'       , 'Laniarius ferrugineus'       , 'Complic labor NOS-deliv'  , 'Barber');       
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (16 , 'Pie, rufous tree'            , 'Dendrocitta vagabunda'      , 'Madoqua kirkii'              , 'Inj mult thoracic vessel' , 'Twitty');       
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (17 , 'Greater kudu'                , 'Tragelaphus strepsiceros'   , 'Oryx gazella'                , 'Comb deg cord in oth dis' , 'Stott');        
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (18 , 'Greater roadrunner'          , 'Geococcyx californianus'    , 'Phoenicopterus ruber'        , 'Joint symptom NEC-oth jt' , 'Gullivent');    
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (19 , 'Possum, golden brush-tailed' , 'Trichosurus vulpecula'      , 'Vanellus sp.'                , 'Mal neo ureteric orifice' , 'Duncanson');    
+INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (20 , 'Indian leopard'              , 'Panthera pardus'            , 'Vulpes vulpes'               , 'Integument tiss symp NEC' , 'Reppaport');    
+
+-- Employees
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(1  , '18853 41st Ave, Vancouver B.C'         , 'Benjamin' , 'Kowalewicz'  , 'benk33@gmail.com'             , '778-996-3324' , 333908767  , ((TO_DATE('1979-02-01'  , 'yyyy/mm/dd HH24:MI'))));
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(2  , '14456 Acorn Rd., Langley B.C'          , 'Ian'      , 'Dsa'         , 'iandsa@hotmail.com'           , '604-333-1212' , 333444555  , ((TO_DATE('1965-03-11'  , 'yyyy/mm/dd HH24:MI'))));  
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(3  , '5555 Fern St., Burnaby B.C'            , 'Aaron'    , 'Solowoniuk'  , 'aaronsolowoniuk@gmail.com'    , '778-090-2323' , 767676799  , ((TO_DATE('2000-08-14'  , 'yyyy/mm/dd HH24:MI'))));  
