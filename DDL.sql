@@ -85,6 +85,7 @@ CREATE TABLE MadeUpOf(
 CREATE TABLE Feed (
 	feederID INTEGER,
 	animalID INTEGER,
+	PRIMARY KEY (feederID, animalID),
 	FOREIGN KEY (feederID) REFERENCES Feeders(employeeID)
 		ON DELETE CASCADE,
 	FOREIGN KEY (animalID) REFERENCES Animals(animalID)
