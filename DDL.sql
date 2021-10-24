@@ -8,20 +8,20 @@ CREATE TABLE Animals(
 -- TODO normalize
 CREATE TABLE Breeds(
 	breedID INTEGER PRIMARY KEY,
-	breed CHAR(50),
-	species CHAR(50),
-	animalGroup CHAR(50),
+	breed CHAR(100),
+	species CHAR(100),
+	animalGroup CHAR(100),
 	facts CHAR(1000),
 	status CHAR(50)
 );
 
 CREATE TABLE Employees(
 	employeeID INTEGER PRIMARY KEY,
-	address VARCHAR(50) NOT NULL,
-	firstName VARCHAR (30),
-	lastName VARCHAR(30),
-	email VARCHAR(30) UNIQUE,
-	phoneNumber VARCHAR(20),
+	address CHAR(100) NOT NULL,
+	firstName CHAR(100),
+	lastName CHAR(100),
+	email CHAR(100) UNIQUE,
+	phoneNumber CHAR(100),
 	sin INTEGER UNIQUE NOT NULL,
 	birthDate DATE);
 
@@ -48,7 +48,7 @@ CREATE TABLE Enclosures(
 
 CREATE TABLE FoodSupplies(
 	supplyID INTEGER PRIMARY KEY,
-	name CHAR(50),
+	name CHAR(100),
 	expiryDate DATE,
 	quantity INTEGER,
 	unit CHAR(50)
@@ -167,8 +167,8 @@ CREATE TABLE TrainedBy(
 	FOREIGN KEY (animalID) REFERENCES Animals(animalID) ON DELETE CASCADE);
 
 CREATE TABLE MedicalRecords(
-	notes VARCHAR(1000), 
-	purpose VARCHAR(1000), 
+	notes CHAR(1000), 
+	purpose CHAR(1000), 
 	dateTime DATE, 
 	animalID INTEGER, 
 	vetID INTEGER NOT NULL, 
