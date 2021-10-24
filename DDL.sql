@@ -1,3 +1,6 @@
+-- SQL to drop all tables (pasting here for convenience)
+-- select 'drop table '||table_name||' cascade constraints;' from user_tables;
+
 -- TABLES
 
 -- TODO
@@ -5,14 +8,18 @@ CREATE TABLE Animals(
     animalID INTEGER PRIMARY KEY
 );
 
--- TODO normalize
+CREATE TABLE Species(
+	species CHAR(100) PRIMARY KEY NOT NULL,
+	animalGroup CHAR(100) NOT NULL
+);
+
 CREATE TABLE Breeds(
 	breedID INTEGER PRIMARY KEY,
 	breed CHAR(100) UNIQUE,
-	species CHAR(100),
-	animalGroup CHAR(100),
+	species CHAR(100) NOT NULL,
 	facts CHAR(1000),
-	status CHAR(50)
+	status CHAR(50) NOT NULL,
+	FOREIGN KEY (species) REFERENCES Species(species)
 );
 
 CREATE TABLE Employees(
@@ -184,27 +191,49 @@ INSERT INTO Animals(animalID) VALUES(3);
 INSERT INTO Animals(animalID) VALUES(4); 
 INSERT INTO Animals(animalID) VALUES(5); 
 
--- Breed
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (1  , 'Grizzly bear'                , 'Ursus arctos'               , 'Vombatus ursinus'            , 'Peritoneal abscess'       , 'Canellas');     
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (2  , 'Jackal, indian'              , 'Canis aureus'               , 'Aquila chrysaetos'           , 'Dislocation sternum-open' , 'Benois');       
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (3  , 'American alligator'          , 'Alligator mississippiensis' , 'Choloepus hoffmani'          , 'Hit by train-employee'    , 'Windley');      
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (4  , 'Toucan, white-throated'      , 'Ramphastos tucanus'         , 'Cereopsis novaehollandiae'   , 'Anal sphincter tear-del'  , 'Leynagh');      
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (5  , 'Monkey, red howler'          , 'Alouatta seniculus'         , 'Colobus guerza'              , 'Pulmon circulat dis NOS'  , 'Ancketill');    
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (6  , 'Cougar'                      , 'Felis concolor'             , 'Papio cynocephalus'          , 'Vertigo'                  , 'Warhurst');     
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (7  , 'Racer, blue'                 , 'Coluber constrictor foxii'  , 'Neotis denhami'              , 'Blood inf dt cen ven cth' , 'Dowson');       
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (8  , 'Pacific gull'                , 'Gabianus pacificus'         , 'Morelia spilotes variegata'  , 'Neonat jaund in oth dis'  , 'Jaggard');      
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (9  , 'Wallaby, whip-tailed'        , 'Macropus parryi'            , 'Caiman crocodilus'           , 'Postabortion gu infect'   , 'Amort');        
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (10 , 'Lilac-breasted roller'       , 'Coracias caudata'           , 'Alcelaphus buselaphus cokii' , 'Causalgia lower limb'     , 'Densham');      
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (11 , 'Dove, rock'                  , 'Columba livia'              , 'Cyrtodactylus louisiadensis' , 'Pulmon TB NOS-micro dx'   , 'Killingworth'); 
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (12 , 'Cat, ringtail'               , 'Bassariscus astutus'        , 'Butorides striatus'          , 'War injury:bullet NEC'    , 'Sayse');        
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (13 , 'Gerbil (unidentified)'       , 'Gerbillus sp.'              , 'Pteropus rufus'              , 'Fam hx genet dis carrier' , 'de Savery');    
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (14 , 'Tailless tenrec'             , 'Tenrec ecaudatus'           , 'Petaurus norfolcensis'       , 'Food/vomit pneumonitis'   , 'Kenner');       
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (15 , 'Wallaby, bennett''s'         , 'Macropus rufogriseus'       , 'Laniarius ferrugineus'       , 'Complic labor NOS-deliv'  , 'Barber');       
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (16 , 'Pie, rufous tree'            , 'Dendrocitta vagabunda'      , 'Madoqua kirkii'              , 'Inj mult thoracic vessel' , 'Twitty');       
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (17 , 'Greater kudu'                , 'Tragelaphus strepsiceros'   , 'Oryx gazella'                , 'Comb deg cord in oth dis' , 'Stott');        
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (18 , 'Greater roadrunner'          , 'Geococcyx californianus'    , 'Phoenicopterus ruber'        , 'Joint symptom NEC-oth jt' , 'Gullivent');    
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (19 , 'Possum, golden brush-tailed' , 'Trichosurus vulpecula'      , 'Vanellus sp.'                , 'Mal neo ureteric orifice' , 'Duncanson');    
-INSERT INTO Breeds (breedID , breed , species , animalGroup , facts , status) VALUES (20 , 'Indian leopard'              , 'Panthera pardus'            , 'Vulpes vulpes'               , 'Integument tiss symp NEC' , 'Reppaport');    
+-- Species
+INSERT INTO Species (species , animalGroup) VALUES ('Bear'                      , 'Mammal'   );              
+INSERT INTO Species (species , animalGroup) VALUES ('Canidae'                   , 'Mammal'   );              
+INSERT INTO Species (species , animalGroup) VALUES ('Alligatoridae'             , 'Reptile'  );              
+INSERT INTO Species (species , animalGroup) VALUES ('Elephantidae'              , 'Mammal'   );              
+INSERT INTO Species (species , animalGroup) VALUES ('Alouatta seniculus'        , 'Fish'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Felis concolor'            , 'Fish'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Coluber constrictor foxii' , 'Fish'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Gabianus pacificus'        , 'Fish'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Ramphastidae'              , 'Bird'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Coracias caudata'          , 'Bird'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Columba livia'             , 'Bird'     );              
+INSERT INTO Species (species , animalGroup) VALUES ('Bassariscus astutus'       , 'Bird'     );            
+INSERT INTO Species (species , animalGroup) VALUES ('Gerbillus sp.'             , 'Reptile'  );            
+INSERT INTO Species (species , animalGroup) VALUES ('Tenrec ecaudatus'          , 'Reptile'  );            
+INSERT INTO Species (species , animalGroup) VALUES ('Macropus rufogriseus'      , 'Reptile'  );            
+INSERT INTO Species (species , animalGroup) VALUES ('Dendrocitta vagabunda'     , 'Reptile'  );         
+INSERT INTO Species (species , animalGroup) VALUES ('Tragelaphus strepsiceros'  , 'Amphibian');         
+INSERT INTO Species (species , animalGroup) VALUES ('Geococcyx californianus'   , 'Amphibian');         
+INSERT INTO Species (species , animalGroup) VALUES ('Trichosurus vulpecula'     , 'Amphibian');         
+INSERT INTO Species (species , animalGroup) VALUES ('Panthera pardus'           , 'Amphibian');         
+
+-- Breeds
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (1  , 'Grizzly bear'                , 'Bear'                      , 'Peritoneal abscess'       , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (2  , 'Jackal, indian'              , 'Canidae'                   , 'Dislocation sternum-open' , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (3  , 'American alligator'          , 'Alligatoridae'             , 'Hit by train-employee'    , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (4  , 'Indian elephant'             , 'Elephantidae'              , 'Anal sphincter tear-del'  , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (5  , 'Monkey, red howler'          , 'Alouatta seniculus'        , 'Pulmon circulat dis NOS'  , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (6  , 'Cougar'                      , 'Felis concolor'            , 'Vertigo'                  , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (7  , 'Racer, blue'                 , 'Coluber constrictor foxii' , 'Blood inf dt cen ven cth' , 'Vulnerable');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (8  , 'Pacific gull'                , 'Gabianus pacificus'        , 'Neonat jaund in oth dis'  , 'Endangered');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (9  , 'Toucan, white-throated'      , 'Ramphastidae'              , 'Postabortion gu infect'   , 'Endangered');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (10 , 'Lilac-breasted roller'       , 'Coracias caudata'          , 'Causalgia lower limb'     , 'Endangered');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (11 , 'Dove, rock'                  , 'Columba livia'             , 'Pulmon TB NOS-micro dx'   , 'Endangered');              
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (12 , 'Cat, ringtail'               , 'Bassariscus astutus'       , 'War injury:bullet NEC'    , 'Last Concern');            
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (13 , 'Gerbil (unidentified)'       , 'Gerbillus sp.'             , 'Fam hx genet dis carrier' , 'Last Concern');            
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (14 , 'Tailless tenrec'             , 'Tenrec ecaudatus'          , 'Food/vomit pneumonitis'   , 'Last Concern');            
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (15 , 'Wallaby, bennett''s'         , 'Macropus rufogriseus'      , 'Complic labor NOS-deliv'  , 'Last Concern');            
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (16 , 'Pie, rufous tree'            , 'Dendrocitta vagabunda'     , 'Inj mult thoracic vessel' , 'Near Threatened');         
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (17 , 'Greater kudu'                , 'Tragelaphus strepsiceros'  , 'Comb deg cord in oth dis' , 'Near Threatened');         
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (18 , 'Greater roadrunner'          , 'Geococcyx californianus'   , 'Joint symptom NEC-oth jt' , 'Near Threatened');         
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (19 , 'Possum, golden brush-tailed' , 'Trichosurus vulpecula'     , 'Mal neo ureteric orifice' , 'Near Threatened');         
+INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (20 , 'Indian leopard'              , 'Panthera pardus'           , 'Integument tiss symp NEC' , 'Near Threatened');
 
 -- Employees
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(1  , '18853 41st Ave, Vancouver B.C'         , 'Benjamin' , 'Kowalewicz'  , 'benk33@gmail.com'             , '778-996-3324' , 333908767  , ((TO_DATE('1979-02-01'  , 'yyyy/mm/dd'))));
