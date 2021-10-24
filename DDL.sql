@@ -3,10 +3,48 @@
 
 -- TABLES
 
--- TODO
 CREATE TABLE Animals(
-    animalID INTEGER PRIMARY KEY
-);
+    animalID INTEGER PRIMARY KEY,
+	name VARCHAR(30) NOT NULL, 
+	breedID INTEGER NOT NULL, 
+	enclosureID INTEGER NOT NULL, 
+	birthDate DATE NOT NULL,
+	sex CHAR(2) NOT NULL,
+	age INTEGER,
+	weight INTEGER,
+	arrivalDate DATE,
+	deceasedDate DATE,
+	bioData VARCHAR(100),
+	FOREIGN KEY (breedID) REFERENCES Breeds(breedID), 
+	FOREIGN KEY (enclosureID) REFERENCES Enclosures(enclosureID);
+)
+
+CREATE TABLE Breeds(
+	breedID INTEGER PRIMARY KEY, 
+	breed VARCHAR(30),
+	species VARCHAR(30) NOT NULL,
+	animalGroup VARCHAR(30) NOT NULL,
+	facts VARCHAR(100),
+	endangeredStatus VARCHAR(10) NOT NULL;
+)
+
+CREATE TABLE Enclosures(
+	enclosureID INTEGER PRIMARY KEY,
+	name VARCHAR(30),
+	enclosureType VARCHAR(30),
+	size INTEGER,
+	capacity INTEGER,
+	temperature INTEGER,
+	humidity INTEGER;
+)
+
+CREATE TABLE ParentOF(
+	parent_animalID INTEGER Not Null,
+	child_animalID INTEGER,
+	PRIMARY KEY (parent_animalID, child_animalID),
+	FOREIGN KEY (parent_animalID) REFERENCES Animals(animalID),
+	FOREIGN KEY (child_animalID) REFERENCES Animals(animalID);
+)
 
 CREATE TABLE Species(
 	species CHAR(100) PRIMARY KEY NOT NULL,
@@ -47,11 +85,6 @@ CREATE TABLE Keepers(
 CREATE TABLE Veterinarians(
 	employeeID INTEGER PRIMARY KEY, 
 	FOREIGN KEY (employeeID) REFERENCES Employees(employeeID) ON DELETE CASCADE);	
-
--- TODO Duy and Jessica
-CREATE TABLE Enclosures(
-	enclosureID INTEGER PRIMARY KEY
-);
 
 CREATE TABLE FoodSupplies(
 	supplyID INTEGER PRIMARY KEY,
@@ -185,11 +218,17 @@ CREATE TABLE MedicalRecords(
 -- INSERT STAMENETS
 
 -- Animals TODO
-INSERT INTO Animals(animalID) VALUES(1); 
-INSERT INTO Animals(animalID) VALUES(2); 
-INSERT INTO Animals(animalID) VALUES(3); 
-INSERT INTO Animals(animalID) VALUES(4); 
-INSERT INTO Animals(animalID) VALUES(5); 
+INSERT INTO Animals(animalID, name, breedID, enclosureID, birthDate, sex, age, weight, arrivalDate, deceasedDate, bioData) VALUES(1, 'Kingsley', 1, 1, '16-DEC-1975', 'M', 7, 200, '16-DEC-1975', Null, Null); 
+INSERT INTO Animals(animalID, name, breedID, enclosureID, birthDate, sex, age, weight, arrivalDate, deceasedDate, bioData) VALUES(1, 'Kingsley', 1, 1, '16-DEC-1975', 'M', 7, 200, '16-DEC-1975', Null, Null); 
+
+-- Breeds TODO
+INSERT INTO Breeds(breedID) VALUES(1); 
+
+
+-- Enclosures TODO
+
+
+-- ParentOf TODO
 
 -- Species
 INSERT INTO Species (species , animalGroup) VALUES ('Bear'                      , 'Mammal'   );              
