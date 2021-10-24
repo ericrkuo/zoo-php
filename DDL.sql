@@ -15,7 +15,7 @@ CREATE TABLE Species(
 
 CREATE TABLE Breeds(
 	breedID INTEGER PRIMARY KEY,
-	breed CHAR(100) UNIQUE,
+	breed CHAR(100) UNIQUE NOT NULL,
 	species CHAR(100) NOT NULL,
 	facts CHAR(1000),
 	status CHAR(50) NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE Breeds(
 CREATE TABLE Employees(
 	employeeID INTEGER PRIMARY KEY,
 	address CHAR(100) NOT NULL,
-	firstName CHAR(100),
-	lastName CHAR(100),
+	firstName CHAR(100) NOT NULL,
+	lastName CHAR(100) NOT NULL,
 	email CHAR(100) UNIQUE,
 	phoneNumber CHAR(100),
 	sin INTEGER UNIQUE NOT NULL,
@@ -55,9 +55,9 @@ CREATE TABLE Enclosures(
 
 CREATE TABLE FoodSupplies(
 	supplyID INTEGER PRIMARY KEY,
-	name CHAR(100),
-	expiryDate DATE,
-	quantity INTEGER,
+	name CHAR(100) NOT NULL,
+	expiryDate DATE NOT NULL,
+	quantity INTEGER NOT NULL,
 	unit CHAR(50)
 );
 
@@ -79,7 +79,7 @@ CREATE TABLE MadeUpOf(
 	feederID INTEGER,
 	animalID INTEGER,
 	dateTime DATE,
-	amount INTEGER,
+	amount INTEGER NOT NULL,
 	PRIMARY KEY (supplyID, feederID, animalID, dateTime),
 	FOREIGN KEY (supplyID) REFERENCES FoodSupplies(supplyID),
 	-- TODO fix this FK, waiting on Crystal's email
@@ -100,18 +100,18 @@ CREATE TABLE Feed (
 
 CREATE TABLE Visitors(
 	visitorID INTEGER PRIMARY KEY,
-	firstName CHAR(100),
-	lastName CHAR(100),
+	firstName CHAR(100) NOT NULL,
+	lastName CHAR(100) NOT NULl,
 	birthDate DATE,
 	address CHAR(100),
 	phoneNumber CHAR(100),
-	email CHAR(100)
+	email CHAR(100) UNIQUE
 );
 
 CREATE TABLE VisitorRecords(
 	recordID INTEGER PRIMARY KEY,
 	visitorID INTEGER,
-	visitDate DATE,
+	visitDate DATE NOT NULL,
 	FOREIGN KEY (visitorID) REFERENCES Visitors(visitorID)
 		ON DELETE SET NULL
 );
@@ -121,9 +121,9 @@ CREATE TABLE Events(
 	enclosureID INTEGER NOT NULL,
 	capacity INTEGER,
 	description CHAR(1000),
-	name CHAR(100),
-	startTime DATE,
-	endTime DATE,
+	name CHAR(100) NOT NULL,
+	startTime DATE NOT NULL,
+	endTime DATE NOT NULL,
 	FOREIGN KEY (enclosureID) REFERENCES Enclosures(enclosureID)
 		ON DELETE CASCADE
 );
@@ -174,7 +174,7 @@ CREATE TABLE TrainedBy(
 
 CREATE TABLE MedicalRecords(
 	notes CHAR(1000), 
-	purpose CHAR(1000), 
+	purpose CHAR(1000) NOT NULL, 
 	dateTime DATE, 
 	animalID INTEGER, 
 	vetID INTEGER NOT NULL, 
@@ -248,7 +248,7 @@ INSERT INTO Employees(employeeID, address , firstName , lastName , email , phone
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(10 , '18859 55A ave., Surrey, B.C'           , 'Kelly'    , 'Ye'          , 'agoddexx@hotmail.com'         , '778-909-8787' , 198083235  , ((TO_DATE('1983-03-16'  , 'yyyy/mm/dd'))));  
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(11 , '6545 60th Ave., Surrey, B.C'           , 'Faye'     , 'Marwick'     , 'faye.ay@gmail.com'            , '778-666-2241' , 198165455  , ((TO_DATE('1972-04-22'  , 'yyyy/mm/dd'))));  
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(12 , '7992 Tribia Lane., Coquitlam, B.C'     , 'John'     , 'Frusciante'  , 'jfguitar@gmail.com'           , '604-789-9494' , 199102020  , ((TO_DATE('1968-05-18'  , 'yyyy/mm/dd'))));   
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(13 , '6969 Purple St., Vancouver, B.C'       , 'Flea'     , NULL          , 'fleab@gmail.com'              , '604-574-4577' , 199188887  , ((TO_DATE('1960-04-13'  , 'yyyy/mm/dd'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(13 , '6969 Purple St., Vancouver, B.C'       , 'Flea'     , 'Aelf'        , 'fleab@gmail.com'              , '604-574-4577' , 199188887  , ((TO_DATE('1960-04-13'  , 'yyyy/mm/dd'))));  
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(14 , '7676 Venice St., Langley, B.C'         , 'Chad'     , 'Smith'       , 'thechadsmith@gmail.com'       , '604-989-4576' , 199140404  , ((TO_DATE('1952-01-15'  , 'yyyy/mm/dd'))));  
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(15 , '19984  California Rd., Vancouver, B.C' , 'Anthony'  , 'Kiedis'      , 'akiedis6969@gmail.com'        , '604-737-4203' , 199133226  , ((TO_DATE('1993-01-06'  , 'yyyy/mm/dd'))));  
 INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(16 , '7999 Tribia Lane., Coquitlam, B.C'     , 'Josh'     , 'Klinghoffer' , 'jkling55@gmail.com'           , '778-002-3242' , 199109090  , ((TO_DATE('1999-08-20'  , 'yyyy/mm/dd'))));  
