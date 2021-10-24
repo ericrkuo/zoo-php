@@ -2,49 +2,28 @@
 -- select 'drop table '||table_name||' cascade constraints;' from user_tables;
 
 -- TABLES
+CREATE TABLE Biomes(
+	type CHAR(50) PRIMARY KEY,
+	temperature CHAR(50),
+	humidity CHAR(50)
+);
 
-CREATE TABLE Animals(
-    animalID INTEGER PRIMARY KEY,
-	name VARCHAR(30) NOT NULL, 
-	breedID INTEGER NOT NULL, 
-	enclosureID INTEGER NOT NULL, 
-	birthDate DATE NOT NULL,
-	sex CHAR(2) NOT NULL,
-	age INTEGER,
-	weight INTEGER,
-	arrivalDate DATE,
-	deceasedDate DATE,
-	bioData VARCHAR(100),
-	FOREIGN KEY (breedID) REFERENCES Breeds(breedID), 
-	FOREIGN KEY (enclosureID) REFERENCES Enclosures(enclosureID);
-)
-
-CREATE TABLE Breeds(
-	breedID INTEGER PRIMARY KEY, 
-	breed VARCHAR(30),
-	species VARCHAR(30) NOT NULL,
-	animalGroup VARCHAR(30) NOT NULL,
-	facts VARCHAR(100),
-	endangeredStatus VARCHAR(10) NOT NULL;
-)
+CREATE TABLE EnclosureDimensions(
+	squareFt INTEGER,
+	type CHAR(50),
+	capacity INTEGER,
+	PRIMARY KEY (squareFt, type),
+	FOREIGN KEY (type) REFERENCES Biomes(type) ON DELETE CASCADE
+);
 
 CREATE TABLE Enclosures(
 	enclosureID INTEGER PRIMARY KEY,
-	name VARCHAR(30),
-	enclosureType VARCHAR(30),
-	size INTEGER,
-	capacity INTEGER,
-	temperature INTEGER,
-	humidity INTEGER;
-)
-
-CREATE TABLE ParentOF(
-	parent_animalID INTEGER Not Null,
-	child_animalID INTEGER,
-	PRIMARY KEY (parent_animalID, child_animalID),
-	FOREIGN KEY (parent_animalID) REFERENCES Animals(animalID),
-	FOREIGN KEY (child_animalID) REFERENCES Animals(animalID);
-)
+	name CHAR(50) NOT NULL,
+	squareFt INTEGER NOT NULL,
+	type CHAR(50) NOT NULL,
+	FOREIGN KEY (type) REFERENCES Biomes(type),
+	FOREIGN KEY (squareFt, type) REFERENCES EnclosureDimensions(squareFt, type)
+);
 
 CREATE TABLE Species(
 	species CHAR(100) PRIMARY KEY NOT NULL,
@@ -58,6 +37,30 @@ CREATE TABLE Breeds(
 	facts CHAR(1000),
 	status CHAR(50) NOT NULL,
 	FOREIGN KEY (species) REFERENCES Species(species)
+);
+
+CREATE TABLE Animals(
+    animalID INTEGER PRIMARY KEY,
+	name CHAR(50) NOT NULL, 
+	breedID INTEGER NOT NULL, 
+	enclosureID INTEGER NOT NULL, 
+	birthDate DATE NOT NULL,
+	sex CHAR(2) NOT NULL,
+	age INTEGER,
+	weight INTEGER,
+	arrivalDate DATE,
+	deceasedDate DATE,
+	bioData VARCHAR(1000),
+	FOREIGN KEY (breedID) REFERENCES Breeds(breedID), 
+	FOREIGN KEY (enclosureID) REFERENCES Enclosures(enclosureID)
+);
+
+CREATE TABLE ParentOF(
+	parent_animalID INTEGER,
+	child_animalID INTEGER,
+	PRIMARY KEY (parent_animalID, child_animalID),
+	FOREIGN KEY (parent_animalID) REFERENCES Animals(animalID),
+	FOREIGN KEY (child_animalID) REFERENCES Animals(animalID) ON DELETE CASCADE -- only delete from parentOf if animal has no children
 );
 
 CREATE TABLE Employees(
@@ -217,18 +220,36 @@ CREATE TABLE MedicalRecords(
 
 -- INSERT STAMENETS
 
--- Animals TODO
-INSERT INTO Animals(animalID, name, breedID, enclosureID, birthDate, sex, age, weight, arrivalDate, deceasedDate, bioData) VALUES(1, 'Kingsley', 1, 1, '16-DEC-1975', 'M', 7, 200, '16-DEC-1975', Null, Null); 
-INSERT INTO Animals(animalID, name, breedID, enclosureID, birthDate, sex, age, weight, arrivalDate, deceasedDate, bioData) VALUES(1, 'Kingsley', 1, 1, '16-DEC-1975', 'M', 7, 200, '16-DEC-1975', Null, Null); 
+-- Biomes
+-- Water, Savanna, Jungle, Ice, Plains, Grassland, Mountain, Forest
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Water'     , 2.5  , 70.2); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Savanna'   , 10.7 , 89.9); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Jungle'    , 34.4 , 34.8); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Ice'       , 37.9 , 50.0); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Plains'    , 18.2 , 69.6); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Grassland' , 2.3  , 91.5); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Mountain'  , 31.5 , 58.9); 
+INSERT INTO Biomes (type , temperature , humidity) VALUES ('Forest'    , 36.5 , 53.4); 
 
--- Breeds TODO
-INSERT INTO Breeds(breedID) VALUES(1); 
+-- EnclosureDimensions
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (8  , 'Water'     , 2); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (8  , 'Savanna'   , 1); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (7  , 'Jungle'    , 7); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (5  , 'Ice'       , 6); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (5  , 'Plains'    , 9); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (29 , 'Grassland' , 3); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (6  , 'Mountain'  , 7); 
+INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (9  , 'Forest'    , 4);
 
-
--- Enclosures TODO
-
-
--- ParentOf TODO
+-- Enclosures
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (1  , 'Bernhard, Beier and Kreiger'      , 8  , 'Water');     
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (2  , 'Langworth-Turner'                 , 8  , 'Savanna');   
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (3  , 'Paucek, Daugherty and Vandervort' , 7  , 'Jungle');    
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (4  , 'Schamberger-Heathcote'            , 5  , 'Ice');       
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (5  , 'Berge, Emard and Legros'          , 5  , 'Plains');    
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (6  , 'Kirlin LLC'                       , 29 , 'Grassland'); 
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (7  , 'Howe-Schuppe'                     , 6  , 'Mountain');  
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (8  , 'Raynor, Leuschke and Bergstrom'   , 9  , 'Forest');   
 
 -- Species
 INSERT INTO Species (species , animalGroup) VALUES ('Bear'                      , 'Mammal'   );              
@@ -274,27 +295,114 @@ INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (18 , 'Gr
 INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (19 , 'Possum, golden brush-tailed' , 'Trichosurus vulpecula'     , 'Mal neo ureteric orifice' , 'Near Threatened');         
 INSERT INTO Breeds (breedID , breed , species , facts , status) VALUES (20 , 'Indian leopard'              , 'Panthera pardus'           , 'Integument tiss symp NEC' , 'Near Threatened');
 
+-- Animals
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (1  , 'Fredelia'   , 1  , 1 , (TO_DATE('2001-10-24'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 11  , 318 , (TO_DATE('2007-01-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (2  , 'Tommy'      , 2  , 2 , (TO_DATE('2003-12-19'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 13  , 472 , (TO_DATE('2001-02-06'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (3  , 'Mattie'     , 3  , 3 , (TO_DATE('2002-09-26'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 70  , 466 , (TO_DATE('2001-11-30'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (4  , 'Stavro'     , 4  , 4 , (TO_DATE('2008-01-08'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 28  , 42  , (TO_DATE('2001-02-02'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (5  , 'Adelbert'   , 5  , 5 , (TO_DATE('2001-02-23'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 97  , 352 , (TO_DATE('2007-04-20'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (6  , 'Rochell'    , 6  , 6 , (TO_DATE('2002-03-12'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 8   , 352 , (TO_DATE('2004-12-27'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (7  , 'Odette'     , 7  , 7 , (TO_DATE('2002-09-15'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 17  , 290 , (TO_DATE('2004-04-19'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (8  , 'Tybalt'     , 8  , 8 , (TO_DATE('2005-07-18'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 14  , 223 , (TO_DATE('2002-01-21'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (9  , 'Iris'       , 9  , 8 , (TO_DATE('2009-05-05'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 76  , 434 , (TO_DATE('2001-10-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (10 , 'Shepperd'   , 10 , 1 , (TO_DATE('2001-06-07'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 16  , 123 , (TO_DATE('2002-08-04'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (11 , 'Baxter'     , 1  , 2 , (TO_DATE('2001-09-11'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 18  , 21  , (TO_DATE('2003-10-14'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (12 , 'Daron'      , 2  , 3 , (TO_DATE('2002-11-12'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 28  , 411 , (TO_DATE('2004-03-29'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (13 , 'Maggy'      , 3  , 4 , (TO_DATE('2007-02-24'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 21  , 460 , (TO_DATE('2008-10-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (14 , 'Regen'      , 4  , 5 , (TO_DATE('2005-11-10'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 71  , 496 , (TO_DATE('2001-09-11'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (15 , 'Mathias'    , 5  , 6 , (TO_DATE('2007-04-28'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 77  , 479 , (TO_DATE('2005-05-29'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (16 , 'Gusella'    , 6  , 7 , (TO_DATE('2003-02-09'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 78  , 331 , (TO_DATE('2006-09-12'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (17 , 'Corinne'    , 7  , 8 , (TO_DATE('2010-05-18'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 91  , 237 , (TO_DATE('2002-02-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (18 , 'Dulcy'      , 8  , 8 , (TO_DATE('2009-04-20'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 75  , 454 , (TO_DATE('2001-10-02'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (19 , 'Alexandros' , 9  , 1 , (TO_DATE('2003-11-23'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 48  , 440 , (TO_DATE('2005-08-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (20 , 'Hamlen'     , 10 , 2 , (TO_DATE('2005-02-23'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 50  , 386 , (TO_DATE('2010-02-09'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (21 , 'Janis'      , 1  , 3 , (TO_DATE('2009-01-09'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 32  , 281 , (TO_DATE('2001-03-03'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (22 , 'Dora'       , 2  , 4 , (TO_DATE('2006-11-18'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 41  , 14  , (TO_DATE('2009-07-11'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (23 , 'Gran'       , 3  , 5 , (TO_DATE('2001-08-30'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 33  , 213 , (TO_DATE('2003-03-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (24 , 'Charo'      , 4  , 6 , (TO_DATE('2010-04-09'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 61  , 385 , (TO_DATE('2009-03-27'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (25 , 'Arvie'      , 5  , 7 , (TO_DATE('2006-11-01'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 70  , 158 , (TO_DATE('2004-08-04'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (26 , 'Rochette'   , 6  , 8 , (TO_DATE('2000-05-08'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 34  , 423 , (TO_DATE('2010-09-01'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (27 , 'Corina'     , 7  , 2 , (TO_DATE('2001-11-13'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 58  , 266 , (TO_DATE('2009-11-27'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (28 , 'Worthy'     , 8  , 1 , (TO_DATE('2006-02-28'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 18  , 230 , (TO_DATE('2001-05-11'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (29 , 'Kirby'      , 9  , 2 , (TO_DATE('2009-08-25'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 39  , 166 , (TO_DATE('2010-08-02'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (30 , 'Lilith'     , 10 , 3 , (TO_DATE('2003-09-07'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 22  , 386 , (TO_DATE('2003-06-30'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (31 , 'Georgeanna' , 1  , 4 , (TO_DATE('2006-09-23'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 20  , 434 , (TO_DATE('2005-08-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (32 , 'Giles'      , 2  , 5 , (TO_DATE('2001-02-05'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 4   , 154 , (TO_DATE('2005-06-21'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (33 , 'Margie'     , 3  , 6 , (TO_DATE('2001-11-06'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 100 , 194 , (TO_DATE('2000-10-18'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (34 , 'Percival'   , 4  , 7 , (TO_DATE('2009-10-02'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 46  , 385 , (TO_DATE('2010-09-23'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (35 , 'Emili'      , 5  , 8 , (TO_DATE('2009-08-23'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 15  , 65  , (TO_DATE('2000-12-20'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (36 , 'Purcell'    , 6  , 3 , (TO_DATE('2006-11-30'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 20  , 332 , (TO_DATE('2002-03-23'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (37 , 'Wesley'     , 7  , 1 , (TO_DATE('2010-07-10'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 84  , 293 , (TO_DATE('2006-11-16'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (38 , 'Sayre'      , 8  , 2 , (TO_DATE('2006-11-01'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 60  , 466 , (TO_DATE('2000-10-31'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (39 , 'Marissa'    , 9  , 3 , (TO_DATE('2009-06-01'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 38  , 496 , (TO_DATE('2007-04-21'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (40 , 'Humbert'    , 10 , 4 , (TO_DATE('2008-05-05'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 47  , 299 , (TO_DATE('2005-06-17'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (41 , 'Salomone'   , 1  , 5 , (TO_DATE('2004-11-25'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 13  , 200 , (TO_DATE('2000-09-05'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (42 , 'Xenia'      , 2  , 6 , (TO_DATE('2008-11-20'  , 'yyyy/mm/dd HH24:MI')) , 'M'  , 87  , 74  , (TO_DATE('2004-11-13'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (43 , 'Teodoor'    , 3  , 7 , (TO_DATE('2005-05-12'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 39  , 183 , (TO_DATE('2006-10-22'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (44 , 'Jerome'     , 4  , 8 , (TO_DATE('2007-08-06'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 85  , 153 , (TO_DATE('2001-02-11'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (45 , 'Arline'     , 5  , 4 , (TO_DATE('2000-02-06'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 25  , 370 , (TO_DATE('2003-11-09'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (46 , 'Ann-marie'  , 6  , 1 , (TO_DATE('2008-11-24'  , 'yyyy/mm/dd HH24:MI')) , 'NA' , 60  , 52  , (TO_DATE('2000-01-19'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (47 , 'Celestine'  , 7  , 2 , (TO_DATE('2010-05-15'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 63  , 178 , (TO_DATE('2005-09-12'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (48 , 'Staford'    , 8  , 3 , (TO_DATE('2001-07-26'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 83  , 128 , (TO_DATE('2010-06-16'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (49 , 'Tobit'      , 9  , 4 , (TO_DATE('2000-12-08'  , 'yyyy/mm/dd HH24:MI')) , 'U'  , 31  , 51  , (TO_DATE('2004-09-30'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+INSERT INTO Animals (animalID , name , breedID , enclosureID , birthDate , sex , age , weight , arrivalDate , deceasedDate , bioData) VALUES (50 , 'Archy'      , 10 , 5 , (TO_DATE('2004-10-30'  , 'yyyy/mm/dd HH24:MI')) , 'F'  , 5   , 6   , (TO_DATE('2004-05-23'  , 'yyyy/mm/dd HH24:MI')) , NULL , NULL); 
+
+-- ParentOf
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (36 , 4);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (13 , 8);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (46 , 33); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (11 , 22); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (13 , 46); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (41 , 6);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (37 , 29); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (11 , 49); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (31 , 32); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (30 , 25); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (45 , 10); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (1  , 18); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (18 , 9);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (30 , 9);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (49 , 8);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (9  , 35); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (13 , 41); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (31 , 13); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (36 , 50); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (24 , 31); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (9  , 13); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (49 , 33); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (26 , 4);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (12 , 18); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (35 , 18); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (34 , 3);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (24 , 26); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (3  , 46); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (44 , 10); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (3  , 4);  
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (38 , 34); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (33 , 29); 
+INSERT INTO ParentOf (parent_animalID , child_animalID) VALUES (13 , 10); 
+
 -- Employees
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(1  , '18853 41st Ave, Vancouver B.C'         , 'Benjamin' , 'Kowalewicz'  , 'benk33@gmail.com'             , '778-996-3324' , 333908767  , ((TO_DATE('1979-02-01'  , 'yyyy/mm/dd'))));
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(2  , '14456 Acorn Rd., Langley B.C'          , 'Ian'      , 'Dsa'         , 'iandsa@hotmail.com'           , '604-333-1212' , 333444555  , ((TO_DATE('1965-03-11'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(3  , '5555 Fern St., Burnaby B.C'            , 'Aaron'    , 'Solowoniuk'  , 'aaronsolowoniuk@gmail.com'    , '778-090-2323' , 767676799  , ((TO_DATE('2000-08-14'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(4  , '4661 HollyBerry Rd., Richmond, B.C'    , 'Jonathan' , 'Gallant'     , 'jonnygee222@gmail.com'        , '778-999-5533' , 876456333  , ((TO_DATE('1935-07-19'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(5  , '4546 Alexis St., Richmond, B.C'        , 'Jordan'   , 'Hastings'    , 'jhastings23@gmail.com'        , '778-665-8778' , 199298090  , ((TO_DATE('1992-11-13'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(6  , '18853 55A Ave., Surrey B.C'            , 'Jessica'  , 'Bator'       , 'jkbator333@gmail.com'         , '778-994-2633' , 197690900  , ((TO_DATE('1960-05-19'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(7  , '18894 50th Ave,. Surrey, B.C'          , 'Sara'     , 'Marshall'    , 'saramarshall@student.ubc.ca'  , '778-558-8212' , 197788769  , ((TO_DATE('1996-02-03'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(8  , '8494 Pecan St., Vancouver B.C'         , 'Zahra'    , 'Raza'        , 'zahraza@gmail.com'            , '780-881-4131' , 197842425  , ((TO_DATE('1993-09-30'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(9  , '18852 52nd Ave., Surrey, B.C'          , 'Alex'     , 'Hawk'        , 'alexhawk@student.ubc.ca'      , '778-847-1469' , 197962350  , ((TO_DATE('1993-04-13'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(10 , '18859 55A ave., Surrey, B.C'           , 'Kelly'    , 'Ye'          , 'agoddexx@hotmail.com'         , '778-909-8787' , 198083235  , ((TO_DATE('1983-03-16'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(11 , '6545 60th Ave., Surrey, B.C'           , 'Faye'     , 'Marwick'     , 'faye.ay@gmail.com'            , '778-666-2241' , 198165455  , ((TO_DATE('1972-04-22'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(12 , '7992 Tribia Lane., Coquitlam, B.C'     , 'John'     , 'Frusciante'  , 'jfguitar@gmail.com'           , '604-789-9494' , 199102020  , ((TO_DATE('1968-05-18'  , 'yyyy/mm/dd'))));   
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(13 , '6969 Purple St., Vancouver, B.C'       , 'Flea'     , 'Aelf'        , 'fleab@gmail.com'              , '604-574-4577' , 199188887  , ((TO_DATE('1960-04-13'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(14 , '7676 Venice St., Langley, B.C'         , 'Chad'     , 'Smith'       , 'thechadsmith@gmail.com'       , '604-989-4576' , 199140404  , ((TO_DATE('1952-01-15'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(15 , '19984  California Rd., Vancouver, B.C' , 'Anthony'  , 'Kiedis'      , 'akiedis6969@gmail.com'        , '604-737-4203' , 199133226  , ((TO_DATE('1993-01-06'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(16 , '7999 Tribia Lane., Coquitlam, B.C'     , 'Josh'     , 'Klinghoffer' , 'jkling55@gmail.com'           , '778-002-3242' , 199109090  , ((TO_DATE('1999-08-20'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(17 , '12001 Sad St., Burnaby, B.C'           , 'Thom'     , 'Yorke'       , 'tyorkeradio@outlook.com'      , '604-604-0000' , 199300120  , ((TO_DATE('1989-09-01'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(18 , '7878 Skater St., Surrey, B.C'          , 'Avril'    , 'Lavigne'     , 'avrilavigne@hotmail.com'      , '778-778-7777' , 199412312  , ((TO_DATE('1945-03-08'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(19 , '5564 Fever Rd., Surrey, B.C'           , 'Jason'    , 'Butler'      , 'jasonaalonbutler42@gmail.com' , '778-020-3411' , 199509134  , ((TO_DATE('1941-07-15'  , 'yyyy/mm/dd'))));  
-INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(20 , '10098 English Rd., Langley, B.C'       , 'Damon'    , 'Albarn'      , 'damonboy@outlook.com'         , '984-009-2727' , 199612300  , ((TO_DATE('1986-10-11'  , 'yyyy/mm/dd'))));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(1  , '18853 41st Ave, Vancouver B.C'         , 'Benjamin' , 'Kowalewicz'  , 'benk33@gmail.com'             , '778-996-3324' , 333908767  , (TO_DATE('1979-02-01'  , 'yyyy/mm/dd')));
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(2  , '14456 Acorn Rd., Langley B.C'          , 'Ian'      , 'Dsa'         , 'iandsa@hotmail.com'           , '604-333-1212' , 333444555  , (TO_DATE('1965-03-11'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(3  , '5555 Fern St., Burnaby B.C'            , 'Aaron'    , 'Solowoniuk'  , 'aaronsolowoniuk@gmail.com'    , '778-090-2323' , 767676799  , (TO_DATE('2000-08-14'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(4  , '4661 HollyBerry Rd., Richmond, B.C'    , 'Jonathan' , 'Gallant'     , 'jonnygee222@gmail.com'        , '778-999-5533' , 876456333  , (TO_DATE('1935-07-19'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(5  , '4546 Alexis St., Richmond, B.C'        , 'Jordan'   , 'Hastings'    , 'jhastings23@gmail.com'        , '778-665-8778' , 199298090  , (TO_DATE('1992-11-13'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(6  , '18853 55A Ave., Surrey B.C'            , 'Jessica'  , 'Bator'       , 'jkbator333@gmail.com'         , '778-994-2633' , 197690900  , (TO_DATE('1960-05-19'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(7  , '18894 50th Ave,. Surrey, B.C'          , 'Sara'     , 'Marshall'    , 'saramarshall@student.ubc.ca'  , '778-558-8212' , 197788769  , (TO_DATE('1996-02-03'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(8  , '8494 Pecan St., Vancouver B.C'         , 'Zahra'    , 'Raza'        , 'zahraza@gmail.com'            , '780-881-4131' , 197842425  , (TO_DATE('1993-09-30'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(9  , '18852 52nd Ave., Surrey, B.C'          , 'Alex'     , 'Hawk'        , 'alexhawk@student.ubc.ca'      , '778-847-1469' , 197962350  , (TO_DATE('1993-04-13'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(10 , '18859 55A ave., Surrey, B.C'           , 'Kelly'    , 'Ye'          , 'agoddexx@hotmail.com'         , '778-909-8787' , 198083235  , (TO_DATE('1983-03-16'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(11 , '6545 60th Ave., Surrey, B.C'           , 'Faye'     , 'Marwick'     , 'faye.ay@gmail.com'            , '778-666-2241' , 198165455  , (TO_DATE('1972-04-22'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(12 , '7992 Tribia Lane., Coquitlam, B.C'     , 'John'     , 'Frusciante'  , 'jfguitar@gmail.com'           , '604-789-9494' , 199102020  , (TO_DATE('1968-05-18'  , 'yyyy/mm/dd')));   
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(13 , '6969 Purple St., Vancouver, B.C'       , 'Flea'     , 'Aelf'        , 'fleab@gmail.com'              , '604-574-4577' , 199188887  , (TO_DATE('1960-04-13'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(14 , '7676 Venice St., Langley, B.C'         , 'Chad'     , 'Smith'       , 'thechadsmith@gmail.com'       , '604-989-4576' , 199140404  , (TO_DATE('1952-01-15'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(15 , '19984  California Rd., Vancouver, B.C' , 'Anthony'  , 'Kiedis'      , 'akiedis6969@gmail.com'        , '604-737-4203' , 199133226  , (TO_DATE('1993-01-06'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(16 , '7999 Tribia Lane., Coquitlam, B.C'     , 'Josh'     , 'Klinghoffer' , 'jkling55@gmail.com'           , '778-002-3242' , 199109090  , (TO_DATE('1999-08-20'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(17 , '12001 Sad St., Burnaby, B.C'           , 'Thom'     , 'Yorke'       , 'tyorkeradio@outlook.com'      , '604-604-0000' , 199300120  , (TO_DATE('1989-09-01'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(18 , '7878 Skater St., Surrey, B.C'          , 'Avril'    , 'Lavigne'     , 'avrilavigne@hotmail.com'      , '778-778-7777' , 199412312  , (TO_DATE('1945-03-08'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(19 , '5564 Fever Rd., Surrey, B.C'           , 'Jason'    , 'Butler'      , 'jasonaalonbutler42@gmail.com' , '778-020-3411' , 199509134  , (TO_DATE('1941-07-15'  , 'yyyy/mm/dd')));  
+INSERT INTO Employees(employeeID, address , firstName , lastName , email , phoneNumber , sin , birthDate) VALUES(20 , '10098 English Rd., Langley, B.C'       , 'Damon'    , 'Albarn'      , 'damonboy@outlook.com'         , '984-009-2727' , 199612300  , (TO_DATE('1986-10-11'  , 'yyyy/mm/dd')));  
 
 -- Feeders
 INSERT INTO Feeders(employeeID) VALUES(1); 
@@ -323,13 +431,6 @@ INSERT INTO Veterinarians(employeeId) VALUES(18);
 INSERT INTO Veterinarians(employeeId) VALUES(19); 
 INSERT INTO Veterinarians(employeeId) VALUES(20); 
 
--- Enclosures TODO
-INSERT INTO Enclosures(enclosureID) VALUES(1); 
-INSERT INTO Enclosures(enclosureID) VALUES(2); 
-INSERT INTO Enclosures(enclosureID) VALUES(3); 
-INSERT INTO Enclosures(enclosureID) VALUES(4); 
-INSERT INTO Enclosures(enclosureID) VALUES(5); 
-
 -- FoodSupplies
 INSERT INTO FoodSupplies(supplyID ,name ,expiryDate ,quantity ,unit) VALUES(1 , 'Peanuts'  , (TO_DATE('2025/01/01' , 'yyyy/mm/dd')) , 100  , 'grams');  
 INSERT INTO FoodSupplies(supplyID ,name ,expiryDate ,quantity ,unit) VALUES(2 , 'Beef'     , (TO_DATE('2022/05/03' , 'yyyy/mm/dd')) , 1000 , 'pounds'); 
@@ -339,36 +440,36 @@ INSERT INTO FoodSupplies(supplyID ,name ,expiryDate ,quantity ,unit) VALUES(5 , 
 
 -- FeedingSchedules
 -- Feeder 1, Animal 1, Keeper 12
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/06 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/07 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/11 13:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/11 20:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/12 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , ((TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
--- Feeder 2, Animal 2, Keeper 13
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/06 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/07 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/11 13:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/11 20:30' , 'yyyy/mm/dd HH24:MI'))));  
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/12 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
-INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , ((TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI')))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/06 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/07 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/11 13:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/11 20:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/12 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(1 , 1 , 12 , (TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+-- Feeder 2, Animal 2, Keeper 12
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/06 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/07 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/11 13:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/11 20:30' , 'yyyy/mm/dd HH24:MI')));  
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/12 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
+INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
 
 -- MadeUpOf
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 1 , 1 , ((TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI'))) , 10); 
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 1 , 1 , ((TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI'))) , 15); 
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 1 , 1 , ((TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI'))) , 2);  
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 1 , 1 , ((TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI'))) , 2);  
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 1 , 1 , ((TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI'))) , 15); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 1 , 1 , (TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI')) , 10); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 1 , 1 , (TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI')) , 15); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 1 , 1 , (TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI')) , 2);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 1 , 1 , (TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI')) , 2);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 1 , 1 , (TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI')) , 15); 
 
 -- Feed
 INSERT INTO Feed(feederID ,animalID) VALUES(1 ,1); 
@@ -417,20 +518,20 @@ INSERT INTO Events (eventID , enclosureID , capacity , description , name , star
 INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (10 ,5  , 53 , 'Poisoning by histamine H2-receptor blockers, assault'         , 'Waters-Mante'                    , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
 
 -- Reserve
-INSERT INTO Reserve (eventID , visitorID) VALUES (1 ,1); 
-INSERT INTO Reserve (eventID , visitorID) VALUES (2 ,1); 
-INSERT INTO Reserve (eventID , visitorID) VALUES (3 ,1); 
-INSERT INTO Reserve (eventID , visitorID) VALUES (4 ,1); 
-INSERT INTO Reserve (eventID , visitorID) VALUES (1 ,5); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (2 , 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (3 , 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (4 , 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 5); 
 
 -- HostedBy
-INSERT INTO HostedBy(eventID , trainerID) VALUES (1 ,6);
-INSERT INTO HostedBy(eventID , trainerID) VALUES (2 ,7);
-INSERT INTO HostedBy(eventID , trainerID) VALUES (3 ,8);
-INSERT INTO HostedBy(eventID , trainerID) VALUES (4 ,9);
-INSERT INTO HostedBy(eventID , trainerID) VALUES (1 ,10);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (1 , 6);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (2 , 7);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (3 , 8);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (4 , 9);
+INSERT INTO HostedBy(eventID , trainerID) VALUES (1 , 10);
 
---ResponsibleFor
+-- ResponsibleFor
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(11 , 1); 
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(12 , 1); 
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(12 , 2);
@@ -442,33 +543,22 @@ INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(14 , 4);
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(15 , 5); 
 INSERT INTO ResponsibleFor(keeperID , animalID) VALUES(11 , 5);
 
---TrainedBy
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(6, 1);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(7, 3);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(8, 4);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(9, 2);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(10, 5);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(7, 1);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(7, 4);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(9, 4);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(10, 2);
-INSERT INTO TrainedBy(trainerID, animalID) VALUES(6, 5);
+-- TrainedBy
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(6  , 1); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(7  , 3); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(8  , 4); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(9  , 2); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(10 , 5); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(7  , 1); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(7  , 4); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(9  , 4); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(10 , 2); 
+INSERT INTO TrainedBy(trainerID , animalID) VALUES(6  , 5); 
 
---MedicalRecords
-INSERT INTO MedicalRecords(notes, purpose, dateTime, animalID, vetID) 
-VALUES(NULL, 'give painkillers for left leg', '21-OCT-2021', 1, 16) ;
-
-INSERT INTO MedicalRecords(notes, purpose, dateTime, animalID, vetID)
-VALUES('make sure to check up again next Thursday to see if walking is still off', 'bandage right paw due to a cut', '17-OCT-2021', 2, 17);
-
-INSERT INTO MedicalRecords(notes, purpose, dateTime, animalID, vetID)
-VALUES('Keep animal in vet quarters for another week until 13-OCT-2021', 'Clean up bite mark on upper back', '06-OCT-2021', 2, 18);
-
-INSERT INTO MedicalRecords(notes, purpose, dateTime, animalID, vetID)
-VALUES(NULL, 'cleaned up build up behind left ear', '11-OCT-2021', 4, 19);
-
-INSERT INTO MedicalRecords(notes, purpose, dateTime, animalID, vetID)
-VALUES('Make sure dose is taken twice daily: once in the morning before feeding and once after 7pm', 'Medicine prescribed for virus', '13-OCT-2021', 3, 20);
-
-INSERT INTO MedicalRecords(notes, purpose, dateTime, animalID, vetID)
-VALUES('Keep in private enclosure until walking and eating as normal again', 'bandaged a bone fracture on upper right leg', '17-OCT-2021', 3, 18);
+-- MedicalRecords
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'give painkillers for left leg'               , '21-OCT-2021' , 1 , 16) ; 
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('make sure to check up again next Thursday to see if walking is still off'                   , 'bandage right paw due to a cut'              , '17-OCT-2021' , 2 , 17);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep animal in vet quarters for another week until 13-OCT-2021'                             , 'Clean up bite mark on upper back'            , '06-OCT-2021' , 2 , 18);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'cleaned up build up behind left ear'         , '11-OCT-2021' , 4 , 19);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Make sure dose is taken twice daily: once in the morning before feeding and once after 7pm' , 'Medicine prescribed for virus'               , '13-OCT-2021' , 3 , 20);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep in private enclosure until walking and eating as normal again'                         , 'bandaged a bone fracture on upper right leg' , '17-OCT-2021' , 3 , 18);  
