@@ -8,7 +8,7 @@ CREATE TABLE Animals(
 -- TODO normalize
 CREATE TABLE Breeds(
 	breedID INTEGER PRIMARY KEY,
-	breed CHAR(100),
+	breed CHAR(100) UNIQUE,
 	species CHAR(100),
 	animalGroup CHAR(100),
 	facts CHAR(1000),
