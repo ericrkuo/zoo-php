@@ -57,7 +57,7 @@ CREATE TABLE FoodSupplies(
 CREATE TABLE FeedingSchedules(
 	feederID INTEGER,
 	animalID INTEGER,
-	keeperID INTEGER,
+	keeperID INTEGER NOT NULL,
 	dateTime DATE,
 	PRIMARY KEY (feederID, animalID, dateTime),
 	FOREIGN KEY (feederID) REFERENCES Feeders(employeeID)
@@ -65,7 +65,6 @@ CREATE TABLE FeedingSchedules(
 	FOREIGN KEY (animalID) REFERENCES Animals(animalID)
 		ON DELETE CASCADE,
 	FOREIGN KEY (keeperID) REFERENCES Keepers(employeeID)
-		ON DELETE SET NULL
 );
 
 CREATE TABLE MadeUpOf(
@@ -74,7 +73,7 @@ CREATE TABLE MadeUpOf(
 	animalID INTEGER,
 	dateTime DATE,
 	amount INTEGER,
-	PRIMARY KEY (supplyID, feederID, dateTime),
+	PRIMARY KEY (supplyID, feederID, animalID, dateTime),
 	FOREIGN KEY (supplyID) REFERENCES FoodSupplies(supplyID),
 	-- TODO fix this FK, waiting on Crystal's email
 	FOREIGN KEY (feederID, animalID, dateTime)
