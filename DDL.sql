@@ -213,7 +213,7 @@ CREATE TABLE MedicalRecords(
 	animalID INTEGER, 
 	vetID INTEGER NOT NULL, 
 	PRIMARY KEY (dateTime, animalID), 
-	FOREIGN KEY (animalID) REFERENCES Animals(animalID), 
+	FOREIGN KEY (animalID) REFERENCES Animals(animalID) ON DELETE CASCADE, 
 	FOREIGN KEY (vetID) REFERENCES Veterinarians(employeeID));
 
 -- INSERT STAMENETS
