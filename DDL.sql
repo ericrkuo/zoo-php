@@ -21,7 +21,6 @@ CREATE TABLE Enclosures(
 	name CHAR(50) NOT NULL,
 	squareFt INTEGER NOT NULL,
 	type CHAR(50) NOT NULL,
-	FOREIGN KEY (type) REFERENCES Biomes(type),
 	FOREIGN KEY (squareFt, type) REFERENCES EnclosureDimensions(squareFt, type)
 );
 
