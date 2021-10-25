@@ -522,6 +522,13 @@ INSERT INTO Reserve (eventID , visitorID) VALUES (3 , 1);
 INSERT INTO Reserve (eventID , visitorID) VALUES (4 , 1); 
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 5); 
 
+-- FeaturedIn
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (1 , 2);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (2 , 4);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (3 , 6);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (4 , 7);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (1 , 10);
+
 -- HostedBy
 INSERT INTO HostedBy(eventID , trainerID) VALUES (1 , 6);
 INSERT INTO HostedBy(eventID , trainerID) VALUES (2 , 7);
