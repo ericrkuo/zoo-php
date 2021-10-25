@@ -4,14 +4,14 @@
 -- TABLES
 CREATE TABLE Biomes(
 	type CHAR(50) PRIMARY KEY,
-	temperature CHAR(50),
-	humidity CHAR(50)
+	temperature CHAR(50) NOT NULL,
+	humidity CHAR(50) NOT NULL
 );
 
 CREATE TABLE EnclosureDimensions(
 	squareFt INTEGER,
 	type CHAR(50),
-	capacity INTEGER,
+	capacity INTEGER NOT NULL,
 	PRIMARY KEY (squareFt, type),
 	FOREIGN KEY (type) REFERENCES Biomes(type) ON DELETE CASCADE
 );
