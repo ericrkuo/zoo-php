@@ -60,7 +60,7 @@ CREATE TABLE ParentOF(
 	child_animalID INTEGER,
 	PRIMARY KEY (parent_animalID, child_animalID),
 	FOREIGN KEY (parent_animalID) REFERENCES Animals(animalID),
-	FOREIGN KEY (child_animalID) REFERENCES Animals(animalID) ON DELETE CASCADE -- only delete from parentOf if animal has no children
+	FOREIGN KEY (child_animalID) REFERENCES Animals(animalID)
 );
 
 CREATE TABLE Employees(
@@ -556,9 +556,9 @@ INSERT INTO TrainedBy(trainerID , animalID) VALUES(10 , 2);
 INSERT INTO TrainedBy(trainerID , animalID) VALUES(6  , 5); 
 
 -- MedicalRecords
-INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'give painkillers for left leg'               , '21-OCT-2021' , 1 , 16) ; 
-INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('make sure to check up again next Thursday to see if walking is still off'                   , 'bandage right paw due to a cut'              , '17-OCT-2021' , 2 , 17);  
-INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep animal in vet quarters for another week until 13-OCT-2021'                             , 'Clean up bite mark on upper back'            , '06-OCT-2021' , 2 , 18);  
-INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'cleaned up build up behind left ear'         , '11-OCT-2021' , 4 , 19);  
-INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Make sure dose is taken twice daily: once in the morning before feeding and once after 7pm' , 'Medicine prescribed for virus'               , '13-OCT-2021' , 3 , 20);  
-INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep in private enclosure until walking and eating as normal again'                         , 'bandaged a bone fracture on upper right leg' , '17-OCT-2021' , 3 , 18);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'give painkillers for left leg'               , (TO_DATE ('21-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 1 , 16) ; 
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('make sure to check up again next Thursday to see if walking is still off'                   , 'bandage right paw due to a cut'              , (TO_DATE ('17-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 2 , 17);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep animal in vet quarters for another week until 13-OCT-2021'                             , 'Clean up bite mark on upper back'            , (TO_DATE ('06-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 2 , 18);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'cleaned up build up behind left ear'         , (TO_DATE ('11-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 4 , 19);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Make sure dose is taken twice daily: once in the morning before feeding and once after 7pm' , 'Medicine prescribed for virus'               , (TO_DATE ('13-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 3 , 20);  
+INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep in private enclosure until walking and eating as normal again'                         , 'bandaged a bone fracture on upper right leg' , (TO_DATE ('17-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 3 , 18);  
