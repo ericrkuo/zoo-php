@@ -118,7 +118,6 @@ CREATE TABLE MadeUpOf(
 	amount INTEGER NOT NULL,
 	PRIMARY KEY (supplyID, feederID, animalID, dateTime),
 	FOREIGN KEY (supplyID) REFERENCES FoodSupplies(supplyID),
-	-- TODO fix this FK, waiting on Crystal's email
 	FOREIGN KEY (feederID, animalID, dateTime)
 		REFERENCES FeedingSchedules(feederID, animalID, dateTime)
 		ON DELETE CASCADE
