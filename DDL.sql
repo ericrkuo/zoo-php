@@ -240,14 +240,14 @@ INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (6  , 'Mount
 INSERT INTO EnclosureDimensions (squareFt , type , capacity) VALUES (9  , 'Forest'    , 4);
 
 -- Enclosures
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (1  , 'Bernhard, Beier and Kreiger'      , 8  , 'Water');     
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (2  , 'Langworth-Turner'                 , 8  , 'Savanna');   
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (3  , 'Paucek, Daugherty and Vandervort' , 7  , 'Jungle');    
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (4  , 'Schamberger-Heathcote'            , 5  , 'Ice');       
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (5  , 'Berge, Emard and Legros'          , 5  , 'Plains');    
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (6  , 'Kirlin LLC'                       , 29 , 'Grassland'); 
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (7  , 'Howe-Schuppe'                     , 6  , 'Mountain');  
-INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (8  , 'Raynor, Leuschke and Bergstrom'   , 9  , 'Forest');   
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (1  , 'Marine Animal Exhibit'      , 8  , 'Water');     
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (2  , 'Lion Enclosure'                 , 8  , 'Savanna');   
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (3  , 'Small Animals ONLY' , 7  , 'Jungle');    
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (4  , 'All your favorite insects'            , 5  , 'Ice');       
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (5  , 'Whales and other cool fish'          , 5  , 'Plains');    
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (6  , 'Definitely tigers'                       , 29 , 'Grassland'); 
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (7  , 'Penguins and a LOT of ice'                     , 6  , 'Mountain');  
+INSERT INTO Enclosures (enclosureID , name , squareFt , type) VALUES (8  , 'Zebras, yep, Zebras'   , 9  , 'Forest');   
 
 -- Species
 INSERT INTO Species (species , animalGroup) VALUES ('Bear'                      , 'Mammal'   );              
@@ -504,16 +504,16 @@ INSERT INTO VisitorRecords (recordID , visitorID , visitDate) VALUES (9  , 9  , 
 INSERT INTO VisitorRecords (recordID , visitorID , visitDate) VALUES (10 , 10 , (TO_DATE('2010/09/08' , 'yyyy/mm/dd'))); 
 
 -- Events
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (1  , 1 , 42 , 'Pasngr in hv veh injured in clsn w pedl cyc nontraf, sequela' , 'McLaughlin, Schiller and Kuphal' , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (2  , 2 , 27 , 'External constriction of right middle finger'                 , 'Luettgen LLC'                    , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (3  , 3 , 76 , 'Puncture wound without foreign body of lower back and pelvis' , 'Grant, Swift and Block'          , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (4  , 4 , 26 , 'Insrt gastr/duodnl sound cause abn react/compl, w/o misadvnt' , 'Beer-Sauer'                      , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (5  , 5 , 54 , 'Other peripheral vertigo, left ear'                           , 'Berge, Denesik and Bayer'        , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (6  , 1 , 63 , 'Athscl bypass of cor art of txplt heart w ang pctrs w spasm'  , 'Lesch-Hayes'                     , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (7  , 2 , 94 , 'Dislocation of tarsometatarsal joint of right foot'           , 'Hessel LLC'                      , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (8  , 3 , 28 , 'Type I occipital condyle fracture, right side, init'          , 'Smitham-Thompson'                , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (9  , 4 , 52 , 'Subluxation of distal interphaln joint of left thumb, init'   , 'Hammes-Legros'                   , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (10 ,5  , 53 , 'Poisoning by histamine H2-receptor blockers, assault'         , 'Waters-Mante'                    , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (1  , 1 , 42 , 'Dolphin show where tricks are guided by a trainer' , 'The Greatest Dolphin Show' , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (2  , 2 , 27 , 'Free guided tour with lion specialist'                 , 'Lion-centric Tour'                    , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (3  , 3 , 76 , 'Small, farm-like animals are brought together and visitors are allowed to pet them' , 'Petting Zoo Day'          , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (4  , 4 , 26 , 'Insect specialist does an interactive event with insects with big screen' , 'An Interesting Insect Analysis'                      , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (5  , 5 , 54 , 'Night-time light show at fish + whale enclosure', 'Glow in the Dark @ The Whale + Fish Exhibit'        , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (6  , 1 , 63 , 'Marine biologist comes in to answer any questions visitors and aspiring marine biolgists have about the job and/or the animals'  , 'Ask a Marine Biolgist'                     , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (7  , 2 , 94 , 'Visitors see if they can outroar a lion for a prize'           , 'Can you out-ROAR a lion?'                      , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (8  , 3 , 28 , 'Small animals ar brought into same enclosure and trainer does tricks with some of them'          , 'Small Animals are cool too!'                , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (9  , 4 , 52 , 'Visitors are allowed to touch certain bugs under supervision from trainer'   , 'Touch and Insect Day'                   , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (10 ,5  , 53 , 'Trainers prompt whales to splash as much as they can'         , 'Splash Zone'                    , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI'))); 
 
 -- Reserve
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 1); 
