@@ -25,7 +25,7 @@ CREATE TABLE Enclosures(
 );
 
 CREATE TABLE Species(
-	species CHAR(100) PRIMARY KEY NOT NULL,
+	species CHAR(100) PRIMARY KEY,
 	animalGroup CHAR(100) NOT NULL
 );
 
