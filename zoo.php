@@ -33,7 +33,7 @@
 
         <hr />
 
-        <h2>Insert Values into DemoTable</h2>
+        <h2>Insert Values into Animals - NOT DONE </h2>
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             Number: <input type="text" name="insNo"> <br /><br />
@@ -44,7 +44,7 @@
 
         <hr />
 
-        <h2>Update Name in DemoTable</h2>
+        <h2>Update Name in Animals - NOT DONE</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
@@ -57,7 +57,7 @@
 
         <hr />
 
-        <h2>Count the Tuples in DemoTable</h2>
+        <h2>Count the Tuples in Animals</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
             <input type="submit" name="countTuples"></p>
@@ -65,7 +65,7 @@
 
         <hr />
 
-        <h2>Display the Tuples in DemoTable</h2>
+        <h2>Display the Tuples in Animals</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="displayTupleRequest" name="displayTupleRequest">
             <input type="submit" name="displayTuples"></p>
@@ -215,7 +215,6 @@
             executePlainSQL("drop table RESPONSIBLEFOR cascade constraints");
             executePlainSQL("drop table TRAINEDBY cascade constraints");
             executePlainSQL("drop table MEDICALRECORDS cascade constraints");
-            executePlainSQL("drop table DEMOTABLE cascade constraints");
 
             executePlainSQL("drop table VETERINARIANS cascade constraints");
             executePlainSQL("drop table FOODSUPPLIES cascade constraints");
@@ -279,40 +278,34 @@
             printResult($result);
         }
 
-        // HANDLE ALL POST ROUTES
-	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-        function handlePOSTRequest() {
-            if (connectToDB()) {
-                if (array_key_exists('resetTablesRequest', $_POST)) {
-                    handleResetRequest();
-                } else if (array_key_exists('updateQueryRequest', $_POST)) {
-                    handleUpdateRequest();
-                } else if (array_key_exists('insertQueryRequest', $_POST)) {
-                    handleInsertRequest();
-                }
-
-                disconnectFromDB();
-            }
+        // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
+        function requestValid(array $request, $name, $requestName) {
+            return isset($request[$name]) && array_key_exists($requestName, $request);
         }
 
-        // HANDLE ALL GET ROUTES
-	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-        function handleGETRequest() {
+        // Pass the name of the function you want to execute, this will connect to the database, execute the query, and disconnect from the DB
+        function handleRequest($function) {
             if (connectToDB()) {
-                if (array_key_exists('countTuples', $_GET)) {
-                    handleCountRequest();
-                } else if (array_key_exists('displayTuples', $_GET)) {
-                    handleDisplayRequest();
-                }
-
+                $function();
                 disconnectFromDB();
             }
-        }
 
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
-            handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTupleRequest'])) {
-            handleGETRequest();
+        }
+        
+        if (requestValid($_POST, 'reset', 'resetTablesRequest')) {
+            handleRequest('handleResetRequest');
+        }
+        else if (requestValid($_GET, 'displayTuples', 'displayTupleRequest')) {
+            handleRequest('handleDisplayRequest');
+        }
+        else if (requestValid($_GET, 'countTuples', 'countTupleRequest')) {
+            handleRequest('handleCountRequest');
+        }
+        else if (requestValid($_GET, 'updateSubmit', 'updateQueryRequest')) {
+            handleRequest('handleUpdateRequest');
+        }
+        else if (requestValid($_GET, 'insertSubmit', 'insertQueryRequest')) {
+            handleRequest('handleInsertRequest');
         }
 		?>
 	</body>
