@@ -463,11 +463,30 @@ INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 
 INSERT INTO FeedingSchedules(feederID ,animalID ,keeperID ,dateTime) VALUES(2 , 2 , 13 , (TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI'))); 
 
 -- MadeUpOf
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 1 , 1 , (TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI')) , 10); 
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 1 , 1 , (TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI')) , 15); 
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 1 , 1 , (TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI')) , 2);  
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 1 , 1 , (TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI')) , 2);  
-INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 1 , 1 , (TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI')) , 15); 
+-- Feeder 1, Animal 1
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 1 , 1 , (TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI')) , 45); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 1 , 1 , (TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI')) , 46); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 1 , 1 , (TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI')) , 83);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 1 , 1 , (TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI')) , 65);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 1 , 1 , (TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI')) , 57); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 1 , 1 , (TO_DATE('2021/12/06 7:30'  , 'yyyy/mm/dd HH24:MI')) , 50); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 1 , 1 , (TO_DATE('2021/12/07 7:30'  , 'yyyy/mm/dd HH24:MI')) , 59); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 1 , 1 , (TO_DATE('2021/12/11 13:30' , 'yyyy/mm/dd HH24:MI')) , 93);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 1 , 1 , (TO_DATE('2021/12/11 20:30' , 'yyyy/mm/dd HH24:MI')) , 16);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 1 , 1 , (TO_DATE('2021/12/12 7:30'  , 'yyyy/mm/dd HH24:MI')) , 20); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 1 , 1 , (TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI')) ,  9); 
+-- Feeder 2, Animal 2
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 2 , 2 , (TO_DATE('2021/12/31 7:30'  , 'yyyy/mm/dd HH24:MI')) , 26); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 2 , 2 , (TO_DATE('2021/10/25 7:30'  , 'yyyy/mm/dd HH24:MI')) , 32); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 2 , 2 , (TO_DATE('2021/10/25 12:30' , 'yyyy/mm/dd HH24:MI')) , 97);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 2 , 2 , (TO_DATE('2021/10/25 18:30' , 'yyyy/mm/dd HH24:MI')) , 69);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 2 , 2 , (TO_DATE('2021/11/26 7:30'  , 'yyyy/mm/dd HH24:MI')) , 23); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 2 , 2 , (TO_DATE('2021/12/06 7:30'  , 'yyyy/mm/dd HH24:MI')) , 45); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(2 , 2 , 2 , (TO_DATE('2021/12/07 7:30'  , 'yyyy/mm/dd HH24:MI')) , 70); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(3 , 2 , 2 , (TO_DATE('2021/12/11 13:30' , 'yyyy/mm/dd HH24:MI')) , 70);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(4 , 2 , 2 , (TO_DATE('2021/12/11 20:30' , 'yyyy/mm/dd HH24:MI')) , 28);  
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(5 , 2 , 2 , (TO_DATE('2021/12/12 7:30'  , 'yyyy/mm/dd HH24:MI')) , 94); 
+INSERT INTO MadeUpOf(supplyID ,feederID ,animalID ,dateTime ,amount) VALUES(1 , 2 , 2 , (TO_DATE('2021/12/21 7:30'  , 'yyyy/mm/dd HH24:MI')) , 68);
 
 -- Feed
 INSERT INTO Feed(feederID ,animalID) VALUES(1 ,1); 

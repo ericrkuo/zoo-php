@@ -150,6 +150,38 @@
             <input type="hidden" id="displayTupleRequest" name="displayTupleRequest">
             <input type="submit" name="displayTuples"></p>
         </form>
+        
+        <hr />
+
+        <h2>JOIN - Find who feeds an animal, what the animal eats, and when they need to be fed - filter amongst specific dates</h2>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="joinTupleRequest" name="joinTupleRequest">
+
+            <style type="text/css">
+            .tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+            .tg .tg-0lax{text-align:left;vertical-align:top}
+            </style>
+            <table class="tg">
+            <thead>
+            <tr>
+                <td class="tg-0pky">From</td>
+                <td class="tg-0pky"><input type="date" name="fromDate" value="2021-10-01"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">To</td>
+                <td class="tg-0pky"><input type="date" name="toDate" value="2021-12-31"></td>
+            </tr>
+            </thead>
+            </table>
+            <br/>
+
+            <input type="submit" name="joinTuples"></p>
+        </form>
 
         <?php
         include('environment.php');
@@ -226,10 +258,12 @@
                     $success = False;
                 }
             }
+
+            return $statement;
         }
 
-        function printResult($result) { //prints results from a select statement
-            echo "<br>Retrieved data from table Animals:<br>";
+        function printResult($result, $message) { //prints results from a select statement
+            echo "<br>" . $message . "<br>";
 
             // https://stackoverflow.com/questions/2970936/how-to-echo-out-table-rows-from-the-db-php
             echo("<table border='1'>");
@@ -387,7 +421,38 @@
 
             $result = executePlainSQL("SELECT * FROM Animals");
 
-            printResult($result);
+            printResult($result, "Retrieved data from table Animals:");
+        }
+
+        function handleJoinRequest() {
+            global $db_conn;
+
+            $tuple = array (
+                ":bind1" => $_GET['fromDate'],
+                ":bind2" => $_GET['toDate'],
+            );
+
+            $alltuples = array (
+                $tuple
+            );
+
+            $result = executeBoundSQL(
+                "SELECT A.name as AnimalName, A.animalID,
+                        E.firstName, E.lastName, E.employeeID,
+                        FS.name as SupplyName, FS.supplyID,
+                        TO_CHAR(M.dateTime, 'yyyy/mm/dd HH24:MI') as dateTime
+                FROM Animals A, MadeUpOf M, FoodSupplies FS, Employees E
+                WHERE A.animalID = M.animalID
+                AND E.employeeID = M.feederID
+                AND FS.supplyID = M.supplyID
+                AND TRUNC(M.dateTime) >= (TO_DATE(:bind1 , 'yyyy/mm/dd'))
+                AND TRUNC(M.dateTime) <= (TO_DATE(:bind2 , 'yyyy/mm/dd'))
+                ORDER BY A.animalID, M.dateTime"
+                , $alltuples
+            );
+            
+            OCICommit($db_conn);
+            printResult($result, "Result of JOIN between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
         }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
@@ -417,6 +482,9 @@
         }
         else if (requestValid($_POST, 'insertSubmit', 'insertQueryRequest')) {
             handleRequest('handleInsertRequest');
+        }
+        else if (requestValid($_GET, 'joinTuples', 'joinTupleRequest')) {
+            handleRequest('handleJoinRequest');
         }
 		?>
 	</body>
