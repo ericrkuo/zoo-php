@@ -33,11 +33,91 @@
 
         <hr />
 
-        <h2>Insert Values into Animals - NOT DONE </h2>
+        <h2>Insert Values into Animals</h2>
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br /><br />
-            Name: <input type="text" name="insName"> <br /><br />
+            <style type="text/css">
+            .tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+            .tg .tg-0lax{text-align:left;vertical-align:top}
+            </style>
+            <table class="tg">
+            <thead>
+            <tr>
+                <th class="tg-0pky">AnimalID</th>
+                <th class="tg-0pky"><input type="number" name="animalID" value="12345"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="tg-0pky">Name</td>
+                <td class="tg-0pky"><input type="text" name="name" value="SAMPLE_NAME"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">BreedID</td>
+                <td class="tg-0pky">
+                <select name="breedID">
+                    <?php
+                        include('environment.php');
+                        handleRequest('handleGetBreedsRequest');
+                    ?>
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">EnclosureID</td>
+                <td class="tg-0pky">
+                <select name="enclosureID">
+                    <?php
+                        // https://stackoverflow.com/questions/18409531/php-drop-down-list-populated-by-oracle-database-rows
+                        include('environment.php');
+                        handleRequest('handleGetEnclosuresRequest');
+                    ?>
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Birthdate</td>
+                <td class="tg-0pky"><input type="date" name="birthDate" value="2000-01-01"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Sex</td>
+                <td class="tg-0pky">
+                    <select name="sex">
+                        <option value="F">Female</option>
+                        <option value="M">Male</option>
+                        <option value="U">Not known</option>
+                        <option value="NA">Not applicable</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Age</td>
+                <td class="tg-0pky"><input type="number" name="age" value="100"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Weight</td>
+                <td class="tg-0pky"><input type="number" name="weight" value="70"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Arrival Date</td>
+                <td class="tg-0pky"><input type="date" name="arrivalDate" value="2000-01-01"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Deceased Date</td>
+                <td class="tg-0pky"><input type="date" name="deceasedDate"></td>
+            </tr>
+            <tr>
+                <td class="tg-0pky">Biological Data</td>
+                <td class="tg-0pky"><input type="text" name="bioData"></td>
+            </tr>
+            </tbody>
+            </table>
+            <br/>
 
             <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
@@ -248,16 +328,48 @@
 
             //Getting the values from user and insert data into the table
             $tuple = array (
-                ":bind1" => $_POST['insNo'],
-                ":bind2" => $_POST['insName']
+                ":bind1" => $_POST['animalID'],
+                ":bind2" => $_POST['name'],
+                ":bind3" => $_POST['breedID'],
+                ":bind4" => $_POST['enclosureID'],
+                ":bind5" => $_POST['birthDate'],
+                ":bind6" => $_POST['sex'],
+                ":bind7" => $_POST['age'],
+                ":bind8" => $_POST['weight'],
+                ":bind9" => $_POST['arrivalDate'],
+                ":bind10" => $_POST['deceasedDate'],
+                ":bind11" => $_POST['bioData']
             );
 
             $alltuples = array (
                 $tuple
             );
 
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+            executeBoundSQL(
+                "insert into ANIMALS values (:bind1, :bind2, :bind3, :bind4,
+                (TO_DATE(:bind5 , 'yyyy/mm/dd')), :bind6, :bind7, :bind8,
+                (TO_DATE(:bind9 , 'yyyy/mm/dd')), (TO_DATE(:bind10 , 'yyyy/mm/dd')), :bind11)"
+                , $alltuples);
             OCICommit($db_conn);
+        }
+
+        function handleGetBreedsRequest() {
+            // https://stackoverflow.com/questions/18409531/php-drop-down-list-populated-by-oracle-database-rows
+            global $db_conn;
+            $result = executePlainSQL("SELECT breedID, breed FROM BREEDS ORDER BY breed");
+            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
+            {
+                echo "<option value=\" ". $row['BREEDID'] . " \">" . $row['BREED'] . "</option>";
+            }
+        }
+
+        function handleGetEnclosuresRequest() {
+            global $db_conn;
+            $result = executePlainSQL("SELECT enclosureID, name FROM ENCLOSURES ORDER BY name");
+            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
+            {
+                echo "<option value=\" ". $row['ENCLOSUREID'] . " \">" . $row['NAME'] . "</option>";
+            }
         }
 
         function handleCountRequest() {
@@ -289,7 +401,6 @@
                 $function();
                 disconnectFromDB();
             }
-
         }
         
         if (requestValid($_POST, 'reset', 'resetTablesRequest')) {
@@ -301,10 +412,10 @@
         else if (requestValid($_GET, 'countTuples', 'countTupleRequest')) {
             handleRequest('handleCountRequest');
         }
-        else if (requestValid($_GET, 'updateSubmit', 'updateQueryRequest')) {
+        else if (requestValid($_POST, 'updateSubmit', 'updateQueryRequest')) {
             handleRequest('handleUpdateRequest');
         }
-        else if (requestValid($_GET, 'insertSubmit', 'insertQueryRequest')) {
+        else if (requestValid($_POST, 'insertSubmit', 'insertQueryRequest')) {
             handleRequest('handleInsertRequest');
         }
 		?>
