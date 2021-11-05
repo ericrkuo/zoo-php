@@ -380,7 +380,10 @@
             );
 
             executeBoundSQL(
-                "insert into ANIMALS values (:bind1, :bind2, :bind3, :bind4,
+                "INSERT INTO ANIMALS(animalID , name , breedID , enclosureID ,
+                                     birthDate , sex , age , weight ,
+                                     arrivalDate , deceasedDate , bioData)
+                VALUES (:bind1, :bind2, :bind3, :bind4,
                 (TO_DATE(:bind5 , 'yyyy/mm/dd')), :bind6, :bind7, :bind8,
                 (TO_DATE(:bind9 , 'yyyy/mm/dd')), (TO_DATE(:bind10 , 'yyyy/mm/dd')), :bind11)"
                 , $alltuples);
