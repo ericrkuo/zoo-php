@@ -440,9 +440,10 @@
             );
 
             $result = executeBoundSQL(
-                "SELECT A.name as AnimalName, A.animalID,
-                        E.firstName, E.lastName, E.employeeID,
-                        FS.name as SupplyName, FS.supplyID,
+                "SELECT A.animalID, E.employeeID, FS.supplyID,
+                        A.name as AnimalName,
+                        E.firstName, E.lastName,
+                        FS.name as SupplyName, 
                         TO_CHAR(M.dateTime, 'yyyy/mm/dd HH24:MI') as dateTime
                 FROM Animals A, MadeUpOf M, FoodSupplies FS, Employees E
                 WHERE A.animalID = M.animalID
