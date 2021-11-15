@@ -576,12 +576,9 @@
         else if (requestValid($_POST, 'selectTuples', 'selectTuplesRequest')) {
             handleRequest('handleSelectRequest');
         }
-<<<<<<< Updated upstream
-=======
         else if (requestValid($_POST, 'deleteTuple', 'deleteRequest')) {
             handleRequest('handleDeleteRequest');
         }
->>>>>>> Stashed changes
 		?>
 	</body>
 </html>
