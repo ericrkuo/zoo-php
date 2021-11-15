@@ -183,46 +183,6 @@
             <input type="submit" name="joinTuples"></p>
         </form>
 
-        <hr />
-
-        <h2>Delete an Event</h2>
-        <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="deleteRequest" name="deleteRequest">
-            <label for="deleteMenu">Choose an Event to Delete</label>
-            <select name="eventToDelete" id="eventToDelete">
-                <option value=1>The Greatest Dolphin Show</option>
-                <option value=2>Lion-centric Tour</option>
-                <option value=3>Petting Zoo Day</option>
-                <option value=4>An Interesting Insect Analysis</option>
-                <option value=5>Glow in the Dark @ The Whale + Fish Exhibit</option>
-                <option value=6>Ask a Marine Biolgist</option>
-                <option value=7>Can you out-ROAR a lion?</option>
-                <option value=8>Small Animals are cool too!</option>
-                <option value=9>Touch and Insect Day</option>
-                <option value=10>Splash Zone</option>
-            </select>
-            <input type="submit" name="deleteTuple"></p>
-        </form>
-
-        <hr />
-
-        <h2>Select an Enclosure -- Need to Fix </h2>
-        <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
-            <label for="enclosureMenu">Select an Enclosure</label>
-            <select name="enclosure" id="enclosure">
-                <option value="Marine Animal Exhibit">Marine Animal Exhibit</option>
-                <option value="Lion Enclosure">Lion Enclosure</option>
-                <option value="Small Animals ONLY"> Small Animals ONLY</option>
-                <option value="All your favorite insects"> All Your Favorite Insects</option>
-                <option value="Whales and other cool fish"> Whales and Other Cool Fish</option>
-                <option value="Definitely tigers"> Definitely Tigers</option>
-                <option value="Penguins and a LOT of ice"> Penguins and a LOT of ice</option>
-                <option value="Zebras, yep, Zebras">Zebras, Yep, Zebras</option>
-            </select>
-            <input type="hidden" id="selectTuplesRequest" name="selectTuplesRequest">
-            <input type="submit" name="selectTuples">
-        </form>
-
         <?php
         include('environment.php');
 
@@ -499,49 +459,6 @@
             printResult($result, "Result of JOIN between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
         }
 
-        function handleDeleteRequest() {
-            global $db_conn;
-
-            $eventToDelete = $_POST['eventToDelete'];
-            $eventNameDeleted = executePlainSQL("SELECT name FROM Events WHERE eventID='$eventToDelete'");
-            $remainingEvents = executePlainSQL("SELECT name FROM Events WHERE eventID <> '$eventToDelete'");
-            $reserveBeforeDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID");
-            $hostedByBeforeDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID");
-            $featuredInBeforeDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID");
-
-            
-           executePlainSQL("DELETE FROM Events WHERE eventID='$eventToDelete'");
-
-           $reserveAfterDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID");
-           $hostedByAfterDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID");
-           $featuredInAfterDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID");
-           
-            printResult($eventNameDeleted, "Event Deleted:");
-            printResult($remainingEvents, "Events Remaining:");
-            printResult($reserveBeforeDelete, "Reserve Table Before Deletion of Event:");
-            printResult($reserveAfterDelete, "Reserve Table After Deletion of Event:");
-            printResult($hostedByBeforeDelete, "HostedBy Table Before Deletion of Event:");
-            printResult($hostedByAfterDelete, "HostedBy Table After Deletion of Event:");
-            printResult($featuredInBeforeDelete, "FeaturedIn Table Before Deletion of Event:");
-            printResult($featuredInAfterDelete, "FeaturedIn Table After Deletion of Event:");
-        
-            OCICommit($db_conn);
-        }
-
-        // Omit duplicate breeds in table 
-        //Update/add data so it makes sense in the table 
-        //Update the drop down menu so it shows the correct breed after hitting submit
-        function handleSelectRequest() {
-            global $db_conn;
-            $enclosure = $_POST['enclosure'];
-
-            $result = executePlainSQL("SELECT breed FROM Enclosures e, Animals a, Breeds b WHERE e.enclosureID=a.enclosureID AND 
-            a.breedID = b.breedID AND e.name='$enclosure'");
-            printResultEnclosure($result, $enclosure);
-
-            OCICommit($db_conn);
-        }
-
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
             return isset($request[$name]) && array_key_exists($requestName, $request);
@@ -572,12 +489,6 @@
         }
         else if (requestValid($_GET, 'joinTuples', 'joinTupleRequest')) {
             handleRequest('handleJoinRequest');
-        }    
-        else if (requestValid($_POST, 'selectTuples', 'selectTuplesRequest')) {
-            handleRequest('handleSelectRequest');
-        }
-        else if (requestValid($_POST, 'deleteTuple', 'deleteRequest')) {
-            handleRequest('handleDeleteRequest');
         }
 		?>
 	</body>
