@@ -183,7 +183,6 @@
             <input type="submit" name="joinTuples"></p>
         </form>
 
-<<<<<<< HEAD
         <hr />
 
         <h2>Delete an Event</h2>
@@ -201,16 +200,13 @@
         </form>
 
         <hr />
-
-    
-=======
+        
         <h2>Division - Find visitors who reserved all events</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="divisionRequest" name="divisionRequest">
             <input type="submit" name="divisionTuples"></p>
         </form>
 
->>>>>>> origin/master
         <?php
         include('environment.php');
 
