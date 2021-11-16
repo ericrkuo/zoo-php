@@ -18,10 +18,10 @@ CREATE TABLE EnclosureDimensions(
 
 CREATE TABLE Enclosures(
 	enclosureID INTEGER PRIMARY KEY,
-	name CHAR(50) NOT NULL,
+	name CHAR(50) NOT NULL UNIQUE,
 	squareFt INTEGER NOT NULL,
 	type CHAR(50) NOT NULL,
-	FOREIGN KEY (squareFt, type) REFERENCES EnclosureDimensions(squareFt, type)
+	FOREIGN KEY (squareFt, type) REFERENCES EnclosureDimensions(squareFt, type) 
 );
 
 CREATE TABLE Species(

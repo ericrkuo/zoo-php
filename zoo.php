@@ -183,6 +183,24 @@
             <input type="submit" name="joinTuples"></p>
         </form>
 
+        <hr />
+
+        <h2>Delete an Event</h2>
+        <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="deleteRequest" name="deleteRequest">
+            <label for="deleteMenu">Choose an Event to Delete</label>
+            <select name="eventID">
+                        <?php
+                            include('environment.php');
+                            handleRequest('handleGetEventsRequest');
+                        ?>
+               
+            </select>
+            <input type="submit" name="deleteTuple"></p>
+        </form>
+
+        <hr />
+        
         <h2>Division - Find visitors who reserved all events</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="divisionRequest" name="divisionRequest">
@@ -415,6 +433,15 @@
             }
         }
 
+        function handleGetEventsRequest() {
+            global $db_conn;
+            $result = executePlainSQL("SELECT eventID, name FROM EVENTS ORDER BY name");
+            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
+            {
+                echo "<option value=\" ". $row['EVENTID'] . " \">" . $row['NAME'] . "</option>";
+            }
+        }
+
         function handleCountRequest() {
             global $db_conn;
 
@@ -463,6 +490,35 @@
             
             OCICommit($db_conn);
             printResult($result, "Result of JOIN between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
+        }
+
+        function handleDeleteRequest() {
+            global $db_conn;
+
+            $eventToDelete = $_POST['eventID'];
+            $eventNameDeleted = executePlainSQL("SELECT name, eventID FROM Events WHERE eventID='$eventToDelete' ORDER BY eventID");
+            $remainingEvents = executePlainSQL("SELECT name, eventID FROM Events WHERE eventID <> '$eventToDelete' ORDER BY eventID");
+            $reserveBeforeDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID ORDER BY e.eventID");
+            $hostedByBeforeDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID ORDER BY e.eventID");
+            $featuredInBeforeDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID ORDER BY e.eventID");
+
+            
+           executePlainSQL("DELETE FROM Events WHERE eventID='$eventToDelete'");
+
+           $reserveAfterDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID ORDER BY e.eventID");
+           $hostedByAfterDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID ORDER BY e.eventID");
+           $featuredInAfterDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID ORDER BY e.eventID");
+           
+            printResult($eventNameDeleted, "Event Deleted:");
+            printResult($remainingEvents, "Events Remaining:");
+            printResult($reserveBeforeDelete, "Reserve Table Before Deletion of Event:");
+            printResult($reserveAfterDelete, "Reserve Table After Deletion of Event:");
+            printResult($hostedByBeforeDelete, "HostedBy Table Before Deletion of Event:");
+            printResult($hostedByAfterDelete, "HostedBy Table After Deletion of Event:");
+            printResult($featuredInBeforeDelete, "FeaturedIn Table Before Deletion of Event:");
+            printResult($featuredInAfterDelete, "FeaturedIn Table After Deletion of Event:");
+        
+            OCICommit($db_conn);
         }
 
         function handleDivisionRequest() {
@@ -529,6 +585,9 @@
         }
         else if (requestValid($_GET, 'joinTuples', 'joinTupleRequest')) {
             handleRequest('handleJoinRequest');
+        }    
+        else if (requestValid($_POST, 'deleteTuple', 'deleteRequest')) {
+            handleRequest('handleDeleteRequest');
         }
         else if (requestValid($_GET, 'divisionTuples', 'divisionRequest')) {
             handleRequest('handleDivisionRequest');
