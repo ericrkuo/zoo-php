@@ -183,6 +183,7 @@
             <input type="submit" name="joinTuples"></p>
         </form>
 
+<<<<<<< HEAD
         <hr />
 
         <h2>Delete an Event</h2>
@@ -202,6 +203,14 @@
         <hr />
 
     
+=======
+        <h2>Division - Find visitors who reserved all events</h2>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="divisionRequest" name="divisionRequest">
+            <input type="submit" name="divisionTuples"></p>
+        </form>
+
+>>>>>>> origin/master
         <?php
         include('environment.php');
 
@@ -516,6 +525,39 @@
             OCICommit($db_conn);
         }
 
+        function handleDivisionRequest() {
+            global $db_conn;
+
+            $result = executePlainSQL(
+                "SELECT v.visitorID, v.firstName, v.lastName
+                FROM Visitors v
+                WHERE NOT EXISTS (
+                    SELECT eventID FROM Events
+                    MINUS
+                    SELECT r.eventID
+                    FROM Reserve r
+                    WHERE r.visitorID = v.visitorID)"
+            );
+
+            printResult($result, "Retrieved data for divison query:");
+
+            $result = executePlainSQL(
+                "SELECT v.visitorID, e.eventID, v.firstName, v.lastName, e.name
+                FROM Visitors v, Events e, Reserve r
+                WHERE r.visitorID = v.visitorID AND r.eventID = e.eventID
+                ORDER BY v.visitorID, e.eventID"
+            );
+
+            printResult($result, "All visitors and the events they reserved:");
+
+            $result = executePlainSQL(
+                "SELECT e.eventID, e.name
+                FROM Events e
+                ORDER BY e.eventID"
+            );
+
+            printResult($result, "All events in the zoo:");
+        }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
@@ -550,6 +592,9 @@
         }    
         else if (requestValid($_POST, 'deleteTuple', 'deleteRequest')) {
             handleRequest('handleDeleteRequest');
+        }
+        else if (requestValid($_GET, 'divisionTuples', 'divisionRequest')) {
+            handleRequest('handleDivisionRequest');
         }
 		?>
 	</body>
