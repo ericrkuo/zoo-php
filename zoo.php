@@ -201,23 +201,7 @@
 
         <hr />
 
-        <h2>Select an Enclosure -- Need to Fix </h2>
-        <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
-            <label for="enclosureMenu">Select an Enclosure</label>
-            <select name="enclosure" id="enclosure">
-                <option value="Marine Animal Exhibit">Marine Animal Exhibit</option>
-                <option value="Lion Enclosure">Lion Enclosure</option>
-                <option value="Small Animals ONLY"> Small Animals ONLY</option>
-                <option value="All your favorite insects"> All Your Favorite Insects</option>
-                <option value="Whales and other cool fish"> Whales and Other Cool Fish</option>
-                <option value="Definitely tigers"> Definitely Tigers</option>
-                <option value="Penguins and a LOT of ice"> Penguins and a LOT of ice</option>
-                <option value="Zebras, yep, Zebras">Zebras, Yep, Zebras</option>
-            </select>
-            <input type="hidden" id="selectTuplesRequest" name="selectTuplesRequest">
-            <input type="submit" name="selectTuples">
-        </form>
-
+    
         <?php
         include('environment.php');
 
@@ -532,19 +516,6 @@
             OCICommit($db_conn);
         }
 
-        // Omit duplicate breeds in table 
-        //Update/add data so it makes sense in the table 
-        //Update the drop down menu so it shows the correct breed after hitting submit
-        function handleSelectRequest() {
-            global $db_conn;
-            $enclosure = $_POST['enclosure'];
-
-            $result = executePlainSQL("SELECT breed FROM Enclosures e, Animals a, Breeds b WHERE e.enclosureID=a.enclosureID AND 
-            a.breedID = b.breedID AND e.name='$enclosure'");
-            printResultEnclosure($result, $enclosure);
-
-            OCICommit($db_conn);
-        }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
@@ -577,9 +548,6 @@
         else if (requestValid($_GET, 'joinTuples', 'joinTupleRequest')) {
             handleRequest('handleJoinRequest');
         }    
-        else if (requestValid($_POST, 'selectTuples', 'selectTuplesRequest')) {
-            handleRequest('handleSelectRequest');
-        }
         else if (requestValid($_POST, 'deleteTuple', 'deleteRequest')) {
             handleRequest('handleDeleteRequest');
         }
