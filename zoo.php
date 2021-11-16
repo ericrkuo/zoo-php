@@ -189,17 +189,12 @@
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="deleteRequest" name="deleteRequest">
             <label for="deleteMenu">Choose an Event to Delete</label>
-            <select name="eventToDelete" id="eventToDelete">
-                <option value=1>The Greatest Dolphin Show</option>
-                <option value=2>Lion-centric Tour</option>
-                <option value=3>Petting Zoo Day</option>
-                <option value=4>An Interesting Insect Analysis</option>
-                <option value=5>Glow in the Dark @ The Whale + Fish Exhibit</option>
-                <option value=6>Ask a Marine Biolgist</option>
-                <option value=7>Can you out-ROAR a lion?</option>
-                <option value=8>Small Animals are cool too!</option>
-                <option value=9>Touch and Insect Day</option>
-                <option value=10>Splash Zone</option>
+            <select name="eventID">
+                        <?php
+                            include('environment.php');
+                            handleRequest('handleGetEventsRequest');
+                        ?>
+               
             </select>
             <input type="submit" name="deleteTuple"></p>
         </form>
@@ -449,6 +444,15 @@
             }
         }
 
+        function handleGetEventsRequest() {
+            global $db_conn;
+            $result = executePlainSQL("SELECT eventID, name FROM EVENTS ORDER BY name");
+            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
+            {
+                echo "<option value=\" ". $row['EVENTID'] . " \">" . $row['NAME'] . "</option>";
+            }
+        }
+
         function handleCountRequest() {
             global $db_conn;
 
@@ -502,19 +506,19 @@
         function handleDeleteRequest() {
             global $db_conn;
 
-            $eventToDelete = $_POST['eventToDelete'];
-            $eventNameDeleted = executePlainSQL("SELECT name FROM Events WHERE eventID='$eventToDelete'");
-            $remainingEvents = executePlainSQL("SELECT name FROM Events WHERE eventID <> '$eventToDelete'");
-            $reserveBeforeDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID");
-            $hostedByBeforeDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID");
-            $featuredInBeforeDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID");
+            $eventToDelete = $_POST['eventID'];
+            $eventNameDeleted = executePlainSQL("SELECT name, eventID FROM Events WHERE eventID='$eventToDelete' ORDER BY eventID");
+            $remainingEvents = executePlainSQL("SELECT name, eventID FROM Events WHERE eventID <> '$eventToDelete' ORDER BY eventID");
+            $reserveBeforeDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID ORDER BY e.eventID");
+            $hostedByBeforeDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID ORDER BY e.eventID");
+            $featuredInBeforeDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID ORDER BY e.eventID");
 
             
            executePlainSQL("DELETE FROM Events WHERE eventID='$eventToDelete'");
 
-           $reserveAfterDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID");
-           $hostedByAfterDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID");
-           $featuredInAfterDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID");
+           $reserveAfterDelete = executePlainSQL("SELECT r.eventID, visitorID, name FROM Reserve r, Events e WHERE r.eventID = e.eventID ORDER BY e.eventID");
+           $hostedByAfterDelete = executePlainSQL("SELECT h.eventID, trainerID, name FROM HostedBy h, Events e WHERE h.eventID = e.eventID ORDER BY e.eventID");
+           $featuredInAfterDelete = executePlainSQL("SELECT f.eventID, animalID, name FROM FeaturedIn f, Events e WHERE f.eventID = e.eventID ORDER BY e.eventID");
            
             printResult($eventNameDeleted, "Event Deleted:");
             printResult($remainingEvents, "Events Remaining:");
