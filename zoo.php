@@ -200,6 +200,21 @@
         </form>
 
         <hr />
+
+        <h2>Select Info About an Employee</h2>
+        <form method="POST" action="zoo.php"><!-- refresh page when submitted-->
+                <input type="hidden" id="selectRequest" name="selectRequest">
+                <label for="selectMenu">Choose a type of an Employee</label>
+                <select name="employeeID">
+                            <?php 
+                                include('environment.php');
+                                handleRequest('handleGetEmployeeTablesRequest');
+                            ?>
+                </select>
+                <input type="submit" name="selectEmployeeType"></p>
+        </form>
+
+        <hr />
         
         <h2>Division - Find visitors who reserved all events</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
