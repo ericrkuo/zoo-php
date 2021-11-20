@@ -625,7 +625,7 @@
             printResult($result, "Number of animals in each enclosure and number of animals featured in some event");
 
             $result = executePlainSQL(
-                "SELECT e.enclosureID, a.animalID, ev.eventID, e.name as enclosureName, a.name as animalName, ev.name as eventName
+                "SELECT e.enclosureID, a.animalID, ev.eventID, e.name as enclosureName, a.name as animalName, a.age, ev.name as eventName
                 FROM Animals a, Enclosures e, Events ev, FeaturedIn f
                 WHERE a.enclosureID = e.enclosureID
                 AND ev.enclosureID = e.enclosureID
