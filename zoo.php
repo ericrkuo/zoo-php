@@ -207,6 +207,12 @@
             <input type="submit" name="divisionTuples"></p>
         </form>
 
+        <h2>Nested aggregation with group by - Find average age of animals for each enclosure where more than half of animals in enclosure have performed in some event</h2>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
+            <input type="submit" name="nestedAggregationTuples"></p>
+        </form>
+
         <?php
         include('environment.php');
 
@@ -547,12 +553,65 @@
             printResult($result, "All visitors and the events they reserved:");
 
             $result = executePlainSQL(
-                "SELECT e.eventID, e.name
+                "SELECT e.eventID, e.name, TO_CHAR(e.startTime, 'yyyy/mm/dd HH24:MI') AS startTime, TO_CHAR(e.endTime, 'yyyy/mm/dd HH24:MI') as endTime
                 FROM Events e
                 ORDER BY e.eventID"
             );
 
             printResult($result, "All events in the zoo:");
+        }
+
+        function handleNestedAggregationRequest() {
+            global $db_conn;
+
+            $result = executePlainSQL(
+                "SELECT e.enclosureID, e.name, TRUNC(AVG(a.age),2) as \"AVERAGE AGE\"
+                FROM Enclosures e, Animals a
+                WHERE a.enclosureID = e.enclosureID
+                GROUP BY e.enclosureID, e.name
+                HAVING COUNT(*)/2 <= (
+                    SELECT COUNT(DISTINCT f.animalID)
+                    FROM FeaturedIn f, Events ev 
+                    WHERE f.eventID = ev.eventID
+                    AND ev.enclosureID = e.enclosureID)
+                ORDER BY e.enclosureID"
+            );
+
+            printResult($result, "Nested Aggregation query");
+
+            $result = executePlainSQL(
+                "SELECT *
+                FROM (
+                        SELECT e.enclosureID, e.name, COUNT(*) as \"NUMBER OF ANIMALS\"
+                        FROM Enclosures e, Animals a
+                        WHERE a.enclosureID = e.enclosureID
+                        GROUP BY e.enclosureID, e.name
+                        ORDER BY e.enclosureID
+                    ) A,
+                    (
+                        SELECT e.enclosureID, e.name, COUNT(DISTINCT f.animalID) as \"NUMBER ANIMALS FEATURED IN SOME EVENT\"
+                        FROM FeaturedIn f, Events ev, Enclosures e
+                        WHERE f.eventID = ev.eventID
+                        AND ev.enclosureID = e.enclosureID
+                        GROUP BY e.enclosureID, e.name
+                        ORDER BY e.enclosureID
+                    ) B
+                WHERE A.enclosureID = B.enclosureID"
+            );
+
+            printResult($result, "Number of animals in each enclosure and number of animals featured in some event");
+
+            $result = executePlainSQL(
+                "SELECT e.enclosureID, a.animalID, ev.eventID, e.name as enclosureName, a.name as animalName, ev.name as eventName
+                FROM Animals a, Enclosures e, Events ev, FeaturedIn f
+                WHERE a.enclosureID = e.enclosureID
+                AND ev.enclosureID = e.enclosureID
+                AND f.eventID = ev.eventID
+                AND f.animalID = a.animalID
+                ORDER BY e.enclosureID, a.animalID, ev.eventID"
+            );
+
+            printResult($result, "All animals, their enclosures, and what events featured in");
         }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
@@ -591,6 +650,9 @@
         }
         else if (requestValid($_GET, 'divisionTuples', 'divisionRequest')) {
             handleRequest('handleDivisionRequest');
+        }
+        else if (requestValid($_GET, 'nestedAggregationTuples', 'nestedAggregationRequest')) {
+            handleRequest('handleNestedAggregationRequest');
         }
 		?>
 	</body>
