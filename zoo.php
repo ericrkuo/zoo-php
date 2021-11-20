@@ -207,11 +207,21 @@
             <input type="submit" name="divisionTuples"></p>
         </form>
 
+        <h2> Find Oldest Animal of Each Breed</h2>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="oldestAnimalPerBreedRequest" name="oldestAnimalPerBreedRequest">
+            <input type="submit" name="oldestAnimalPerBreedTuples"></p>
+        </form>
+
+        <hr />
+
         <h2>Nested aggregation with group by - Find average age of animals for each enclosure where more than half of animals in enclosure have performed in some event</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
             <input type="submit" name="nestedAggregationTuples"></p>
         </form>
+
+        <hr />
 
         <?php
         include('environment.php');
@@ -523,7 +533,7 @@
             printResult($hostedByAfterDelete, "HostedBy Table After Deletion of Event:");
             printResult($featuredInBeforeDelete, "FeaturedIn Table Before Deletion of Event:");
             printResult($featuredInAfterDelete, "FeaturedIn Table After Deletion of Event:");
-        
+
             OCICommit($db_conn);
         }
 
@@ -559,6 +569,17 @@
             );
 
             printResult($result, "All events in the zoo:");
+        }
+
+        function handleOldestAnimalPerBreedRequest() {
+            global $db_conn; 
+
+            $result=executePlainSQL("SELECT b.breed, MAX(age) as \"MAX AGE\" FROM Animals a, Breeds b WHERE a.breedID = b.breedID 
+                                    GROUP BY b.breed ORDER BY b.breed");
+            $allAges=executePlainSQL("SELECT b.breed, a.age, a.name, a.animalID FROM Animals a, Breeds b WHERE a.breedID = b.breedID ORDER BY b.breed, a.age");
+
+            printResult($result,"Oldest Animal of Each Breed");
+            printResult($allAges, "All Ages of Animals of Each Breed");
         }
 
         function handleNestedAggregationRequest() {
@@ -650,6 +671,9 @@
         }
         else if (requestValid($_GET, 'divisionTuples', 'divisionRequest')) {
             handleRequest('handleDivisionRequest');
+        } 
+        else if (requestValid($_GET, 'oldestAnimalPerBreedTuples', 'oldestAnimalPerBreedRequest')) {
+            handleRequest('handleOldestAnimalPerBreedRequest');
         }
         else if (requestValid($_GET, 'nestedAggregationTuples', 'nestedAggregationRequest')) {
             handleRequest('handleNestedAggregationRequest');
@@ -657,4 +681,3 @@
 		?>
 	</body>
 </html>
-
