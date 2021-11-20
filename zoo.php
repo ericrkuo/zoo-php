@@ -153,6 +153,36 @@
         
         <hr />
 
+        <h2>Project Enclosures</h2>
+        <h3>Select the attributes to be projected</h3>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="checkbox" id="Type" name="Type" value="b.type">
+            <label for="Type">Type</label><br>
+            
+            <input type="checkbox" id="Temperature" name="Temperature" value="b.temperature">
+            <label for="Temperature">Temperature</label><br>
+            
+            <input type="checkbox" id="Humidity" name="Humidity" value="b.humidity">
+            <label for="Humidity">Humidity</label><br>
+
+            <input type="checkbox" id="EnclosureID" name="EnclosureID" value="e.enclosureID">
+            <label for="EnclosureID">EnclosureID</label><br>
+
+            <input type="checkbox" id="Name" name="Name" value="e.name">
+            <label for="Name">Name</label><br>
+
+            <input type="checkbox" id="SquareFt" name="SquareFt" value="ed.squareFt">
+            <label for="SquareFt">SquareFt</label><br>
+            
+            <input type="checkbox" id="Capacity" name="Capacity" value="ed.capacity">
+            <label for="Capacity">Capacity</label><br><br>
+
+            <input type="hidden" id="projectRequest" name="projectRequest">
+            <input type="submit" name="projectTuples"></p>
+        </form>
+        
+        <hr />
+
         <h2>JOIN - Find who feeds an animal, what the animal eats, and when they need to be fed - filter amongst specific dates</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="joinTupleRequest" name="joinTupleRequest">
@@ -460,6 +490,32 @@
             printResult($result, "Retrieved data from table Animals:");
         }
 
+        function handleProjectRequest() {
+            global $db_conn;
+            
+            $type = $_GET['Type'];
+            $temperature = $_GET['Temperature'];
+            $humidity = $_GET['Humidity'];
+            $enclosureID = $_GET['EnclosureID'];
+            $name = $_GET['Name'];
+            $squareFt = $_GET['SquareFt'];
+            $capacity = $_GET['Capacity'];
+
+            $project = [$type, $temperature, $humidity, $enclosureID, $name, $squareFt, $capacity];
+            $project = implode(', ', array_filter($project));
+
+            if (empty($project)) {
+                $project = '*';
+            }
+
+            $result = executePlainSQL(
+                "SELECT " . $project .
+                " FROM Biomes b, Enclosures e, EnclosureDimensions ed
+                WHERE b.type = ed.type and e.squareFt = ed.squareFt and e.type = ed.type");
+
+            printResult($result, "Projection result on Enclosures");
+        }
+
         function handleJoinRequest() {
             global $db_conn;
 
@@ -591,6 +647,9 @@
         }
         else if (requestValid($_GET, 'divisionTuples', 'divisionRequest')) {
             handleRequest('handleDivisionRequest');
+        }
+        else if (requestValid($_GET, 'projectTuples', 'projectRequest')) {
+            handleRequest('handleProjectRequest');
         }
 		?>
 	</body>
