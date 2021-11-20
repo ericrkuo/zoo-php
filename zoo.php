@@ -207,6 +207,8 @@
             <input type="submit" name="divisionTuples"></p>
         </form>
 
+        <hr />
+
         <h2> Find Oldest Animal of Each Breed</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="oldestAnimalPerBreedRequest" name="oldestAnimalPerBreedRequest">
