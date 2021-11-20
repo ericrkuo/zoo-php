@@ -200,8 +200,6 @@
         </form>
 
         <hr />
-
-
         
         <h2>Division - Find visitors who reserved all events</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
@@ -515,8 +513,7 @@
 
         function handleDeleteRequest() {
             global $db_conn;
-            
- 
+
             $eventToDelete = $_POST['eventID'];
             $eventNameDeleted = executePlainSQL("SELECT name, eventID FROM Events WHERE eventID='$eventToDelete' ORDER BY eventID");
             $remainingEvents = executePlainSQL("SELECT name, eventID FROM Events WHERE eventID <> '$eventToDelete' ORDER BY eventID");
@@ -539,7 +536,7 @@
             printResult($hostedByAfterDelete, "HostedBy Table After Deletion of Event:");
             printResult($featuredInBeforeDelete, "FeaturedIn Table Before Deletion of Event:");
             printResult($featuredInAfterDelete, "FeaturedIn Table After Deletion of Event:");
-    
+
             OCICommit($db_conn);
         }
 
