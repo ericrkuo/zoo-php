@@ -523,16 +523,36 @@ INSERT INTO VisitorRecords (recordID , visitorID , visitDate) VALUES (9  , 9  , 
 INSERT INTO VisitorRecords (recordID , visitorID , visitDate) VALUES (10 , 10 , (TO_DATE('2010/09/08' , 'yyyy/mm/dd'))); 
 
 -- Events
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (1  , 1 , 42 , 'Dolphin show where tricks are guided by a trainer'                                                                              , 'The Greatest Dolphin Show'                   , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (2  , 2 , 27 , 'Free guided tour with lion specialist'                                                                                          , 'Lion-centric Tour'                           , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (3  , 3 , 76 , 'Small, farm-like animals are brought together and visitors are allowed to pet them'                                             , 'Petting Zoo Day'                             , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (4  , 4 , 26 , 'Insect specialist does an interactive event with insects with big screen'                                                       , 'An Interesting Insect Analysis'              , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (5  , 5 , 54 , 'Night-time light show at fish + whale enclosure'                                                                                , 'Glow in the Dark @ The Whale + Fish Exhibit' , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (6  , 1 , 63 , 'Marine biologist comes in to answer any questions visitors and aspiring marine biolgists have about the job and/or the animals' , 'Ask a Marine Biolgist'                       , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (7  , 2 , 94 , 'Visitors see if they can outroar a lion for a prize'                                                                            , 'Can you out-ROAR a lion?'                    , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (8  , 3 , 28 , 'Small animals ar brought into same enclosure and trainer does tricks with some of them'                                         , 'Small Animals are cool too!'                 , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (9  , 4 , 52 , 'Visitors are allowed to touch certain bugs under supervision from trainer'                                                      , 'Touch and Insect Day'                        , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
-INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (10 , 5 , 53 , 'Trainers prompt whales to splash as much as they can'                                                                           , 'Splash Zone'                                 , (TO_DATE ('2014-05-05 16:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2014-05-05 18:00' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (1  , 1 , 42 , 'Dolphin show where tricks are guided by a trainer'                                                                              , 'The Greatest Dolphin Show'                   , (TO_DATE ('2021-10-28 00:50' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-10-28 03:25' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (2  , 1 , 27 , 'Free guided tour with lion specialist'                                                                                          , 'Lion-centric Tour'                           , (TO_DATE ('2021-07-19 22:40' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-07-20 00:53' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (3  , 1 , 76 , 'Small, farm-like animals are brought together and visitors are allowed to pet them'                                             , 'Petting Zoo Day'                             , (TO_DATE ('2021-05-12 10:48' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-05-12 11:22' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (4  , 1 , 26 , 'Insect specialist does an interactive event with insects with big screen'                                                       , 'An Interesting Insect Analysis'              , (TO_DATE ('2021-06-23 09:50' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-06-23 10:59' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (5  , 2 , 54 , 'Night-time light show at fish + whale enclosure'                                                                                , 'Glow in the Dark @ The Whale + Fish Exhibit' , (TO_DATE ('2021-10-24 15:45' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-10-24 17:08' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (6  , 2 , 63 , 'Marine biologist comes in to answer any questions visitors and aspiring marine biolgists have about the job and/or the animals' , 'Ask a Marine Biolgist'                       , (TO_DATE ('2021-05-12 05:10' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-05-12 07:00' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (7  , 2 , 94 , 'Visitors see if they can outroar a lion for a prize'                                                                            , 'Can you out-ROAR a lion?'                    , (TO_DATE ('2021-04-17 01:39' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-04-17 04:17' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (8  , 2 , 28 , 'Small animals ar brought into same enclosure and trainer does tricks with some of them'                                         , 'Small Animals are cool too!'                 , (TO_DATE ('2021-05-24 02:03' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-05-24 04:18' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (9  , 3 , 52 , 'Visitors are allowed to touch certain bugs under supervision from trainer'                                                      , 'Touch and Insect Day'                        , (TO_DATE ('2020-12-02 04:29' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2020-12-02 06:20' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (10 , 3 , 53 , 'Trainers prompt whales to splash as much as they can'                                                                           , 'Splash Zone'                                 , (TO_DATE ('2021-11-12 22:33' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-11-12 23:08' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (11 , 3 , 42 , 'Dolphin show where tricks are guided by a trainer'                                                                              , 'The Greatest Dolphin Show'                   , (TO_DATE ('2021-08-30 07:08' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-08-30 08:09' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (12 , 3 , 27 , 'Free guided tour with lion specialist'                                                                                          , 'Lion-centric Tour'                           , (TO_DATE ('2021-06-09 19:34' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-06-09 21:04' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (13 , 4 , 76 , 'Small, farm-like animals are brought together and visitors are allowed to pet them'                                             , 'Petting Zoo Day'                             , (TO_DATE ('2021-07-06 07:48' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-07-06 09:24' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (14 , 4 , 26 , 'Insect specialist does an interactive event with insects with big screen'                                                       , 'An Interesting Insect Analysis'              , (TO_DATE ('2021-08-29 03:55' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-08-29 05:03' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (15 , 4 , 54 , 'Night-time light show at fish + whale enclosure'                                                                                , 'Glow in the Dark @ The Whale + Fish Exhibit' , (TO_DATE ('2021-03-23 00:16' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-03-23 02:15' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (16 , 4 , 63 , 'Marine biologist comes in to answer any questions visitors and aspiring marine biolgists have about the job and/or the animals' , 'Ask a Marine Biolgist'                       , (TO_DATE ('2021-07-17 02:10' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-07-17 03:36' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (17 , 5 , 94 , 'Visitors see if they can outroar a lion for a prize'                                                                            , 'Can you out-ROAR a lion?'                    , (TO_DATE ('2020-12-06 00:41' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2020-12-06 02:44' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (18 , 5 , 28 , 'Small animals ar brought into same enclosure and trainer does tricks with some of them'                                         , 'Small Animals are cool too!'                 , (TO_DATE ('2021-01-07 22:34' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-01-07 23:20' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (19 , 5 , 52 , 'Visitors are allowed to touch certain bugs under supervision from trainer'                                                      , 'Touch and Insect Day'                        , (TO_DATE ('2021-08-28 19:44' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-08-28 20:40' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (20 , 5 , 53 , 'Trainers prompt whales to splash as much as they can'                                                                           , 'Splash Zone'                                 , (TO_DATE ('2021-01-17 14:09' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-01-17 14:48' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (21 , 6 , 42 , 'Dolphin show where tricks are guided by a trainer'                                                                              , 'The Greatest Dolphin Show'                   , (TO_DATE ('2021-01-01 16:54' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-01-01 19:30' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (22 , 6 , 27 , 'Free guided tour with lion specialist'                                                                                          , 'Lion-centric Tour'                           , (TO_DATE ('2021-01-25 08:04' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-01-25 08:36' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (23 , 6 , 76 , 'Small, farm-like animals are brought together and visitors are allowed to pet them'                                             , 'Petting Zoo Day'                             , (TO_DATE ('2021-10-11 02:40' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-10-11 03:37' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (24 , 6 , 26 , 'Insect specialist does an interactive event with insects with big screen'                                                       , 'An Interesting Insect Analysis'              , (TO_DATE ('2021-02-26 09:00' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-02-26 09:37' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (25 , 7 , 54 , 'Night-time light show at fish + whale enclosure'                                                                                , 'Glow in the Dark @ The Whale + Fish Exhibit' , (TO_DATE ('2021-10-10 23:22' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-10-11 01:38' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (26 , 7 , 63 , 'Marine biologist comes in to answer any questions visitors and aspiring marine biolgists have about the job and/or the animals' , 'Ask a Marine Biolgist'                       , (TO_DATE ('2021-01-03 09:57' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-01-03 10:36' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (27 , 7 , 94 , 'Visitors see if they can outroar a lion for a prize'                                                                            , 'Can you out-ROAR a lion?'                    , (TO_DATE ('2021-09-20 22:28' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-09-21 01:01' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (28 , 7 , 28 , 'Small animals ar brought into same enclosure and trainer does tricks with some of them'                                         , 'Small Animals are cool too!'                 , (TO_DATE ('2021-05-14 23:14' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-05-15 00:05' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (29 , 8 , 52 , 'Visitors are allowed to touch certain bugs under supervision from trainer'                                                      , 'Touch and Insect Day'                        , (TO_DATE ('2021-11-09 21:32' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-11-09 22:59' , 'YYYY-MM-DD HH24:MI')));  
+INSERT INTO Events (eventID , enclosureID , capacity , description , name , startTime , endTime) VALUES (30 , 8 , 53 , 'Trainers prompt whales to splash as much as they can'                                                                           , 'Splash Zone'                                 , (TO_DATE ('2021-03-26 14:22' , 'YYYY-MM-DD HH24:MI')) , (TO_DATE ('2021-03-26 16:21' , 'YYYY-MM-DD HH24:MI')));  
 
 -- Reserve
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 1); 
@@ -544,7 +564,27 @@ INSERT INTO Reserve (eventID , visitorID) VALUES (6 , 1);
 INSERT INTO Reserve (eventID , visitorID) VALUES (7 , 1);
 INSERT INTO Reserve (eventID , visitorID) VALUES (8 , 1);
 INSERT INTO Reserve (eventID , visitorID) VALUES (9 , 1);
-INSERT INTO Reserve (eventID , visitorID) VALUES (10, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (10, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (11, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (12, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (13, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (14, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (15, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (16, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (17, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (18, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (19, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (20, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (21, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (22, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (23, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (24, 1); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (25, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (26, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (27, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (28, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (29, 1);
+INSERT INTO Reserve (eventID , visitorID) VALUES (30, 1);
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 3); 
 INSERT INTO Reserve (eventID , visitorID) VALUES (2 , 3); 
 INSERT INTO Reserve (eventID , visitorID) VALUES (3 , 3); 
@@ -555,6 +595,26 @@ INSERT INTO Reserve (eventID , visitorID) VALUES (7 , 3);
 INSERT INTO Reserve (eventID , visitorID) VALUES (8 , 3);
 INSERT INTO Reserve (eventID , visitorID) VALUES (9 , 3);
 INSERT INTO Reserve (eventID , visitorID) VALUES (10, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (11, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (12, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (13, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (14, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (15, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (16, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (17, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (18, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (19, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (20, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (21, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (22, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (23, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (24, 3); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (25, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (26, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (27, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (28, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (29, 3);
+INSERT INTO Reserve (eventID , visitorID) VALUES (30, 3);
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 9); 
 INSERT INTO Reserve (eventID , visitorID) VALUES (2 , 9); 
 INSERT INTO Reserve (eventID , visitorID) VALUES (3 , 9); 
@@ -565,6 +625,26 @@ INSERT INTO Reserve (eventID , visitorID) VALUES (7 , 9);
 INSERT INTO Reserve (eventID , visitorID) VALUES (8 , 9);
 INSERT INTO Reserve (eventID , visitorID) VALUES (9 , 9);
 INSERT INTO Reserve (eventID , visitorID) VALUES (10, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (11, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (12, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (13, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (14, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (15, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (16, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (17, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (18, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (19, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (20, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (21, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (22, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (23, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (24, 9); 
+INSERT INTO Reserve (eventID , visitorID) VALUES (25, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (26, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (27, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (28, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (29, 9);
+INSERT INTO Reserve (eventID , visitorID) VALUES (30, 9);
 INSERT INTO Reserve (eventID , visitorID) VALUES (1 , 5); 
 INSERT INTO Reserve (eventID , visitorID) VALUES (2 , 6);
 INSERT INTO Reserve (eventID , visitorID) VALUES (3 , 7);
@@ -572,11 +652,44 @@ INSERT INTO Reserve (eventID , visitorID) VALUES (4 , 8);
 INSERT INTO Reserve (eventID , visitorID) VALUES (5 , 10);
 
 -- FeaturedIn
-INSERT INTO FeaturedIn(eventID , animalID) VALUES (1 , 2);
-INSERT INTO FeaturedIn(eventID , animalID) VALUES (2 , 4);
-INSERT INTO FeaturedIn(eventID , animalID) VALUES (3 , 6);
-INSERT INTO FeaturedIn(eventID , animalID) VALUES (4 , 7);
-INSERT INTO FeaturedIn(eventID , animalID) VALUES (1 , 10);
+--- in Enclosure 1
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (1  , 1);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (2  , 10);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (3  , 19);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (4  , 28);
+--- in Enclosure 2
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (5  , 2);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (6  , 11);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (7  , 20);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (8  , 29);
+--- in Enclosure 3
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (9  , 3);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (10 , 12);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (11 , 21);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (12 , 30);
+--- in Enclosure 4
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (13 , 4);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (14 , 13);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (15 , 22);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (16 , 31);
+--- in Enclosure 5
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (17 , 5);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (18 , 14);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (19 , 23);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (20 , 32);
+--- in Enclosure 6
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (21 , 6);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (22 , 15);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (23 , 24);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (24 , 33);
+--- in Enclosure 7
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (25 , 7);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (26 , 16);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (27 , 25);
+-- INSERT INTO FeaturedIn(eventID , animalID) VALUES (28 , 34);
+--- in Enclosure 8
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (29 , 8);
+INSERT INTO FeaturedIn(eventID , animalID) VALUES (30 , 9);
 
 -- HostedBy
 INSERT INTO HostedBy(eventID , trainerID) VALUES (1 , 6);
@@ -616,3 +729,5 @@ INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES
 INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES (NULL                                                                                         , 'cleaned up build up behind left ear'         , (TO_DATE ('11-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 4 , 19);  
 INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Make sure dose is taken twice daily: once in the morning before feeding and once after 7pm' , 'Medicine prescribed for virus'               , (TO_DATE ('13-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 3 , 20);  
 INSERT INTO MedicalRecords(notes , purpose , dateTime , animalID , vetID) VALUES ('Keep in private enclosure until walking and eating as normal again'                         , 'bandaged a bone fracture on upper right leg' , (TO_DATE ('17-OCT-2021' , 'YYYY-MM-DD HH24:MI')) , 3 , 18);  
+
+COMMIT WORK;
