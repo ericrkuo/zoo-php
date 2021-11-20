@@ -454,15 +454,6 @@
             }
         }
 
-        function handleGetEmployeeTablesRequest() {
-            global $db_conn;
-            $result = executePlainSQL("SELECT * FROM sys.tables");
-            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
-            {
-                echo "<option value=\" ". $row['EMPLOYEEEID'] . " \">" . $row['FIRSTNAME'] . "</option>";
-            }
-        }
-
         function handleCountRequest() {
             global $db_conn;
 
@@ -580,14 +571,12 @@
         function handleOldestAnimalPerBreedRequest() {
             global $db_conn; 
 
-            $result=executePlainSQL("SELECT b.breed, MAX(age) FROM Animals a, Breeds b WHERE a.breedID = b.breedID 
+            $result=executePlainSQL("SELECT b.breed, MAX(age) as \"MAX AGE\" FROM Animals a, Breeds b WHERE a.breedID = b.breedID 
                                     GROUP BY b.breed ORDER BY b.breed");
-            $allAges=executePlainSQL("SELECT b.breed, a.age FROM Animals a, Breeds b WHERE a.breedID = b.breedID ORDER BY b.breed");
+            $allAges=executePlainSQL("SELECT b.breed, a.age, a.name, a.animalID FROM Animals a, Breeds b WHERE a.breedID = b.breedID ORDER BY b.breed, a.age");
 
             printResult($result,"Oldest Animal of Each Breed");
             printResult($allAges, "All Ages of Animals of Each Breed");
-            
-            
         }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
@@ -633,4 +622,3 @@
 		?>
 	</body>
 </html>
-
