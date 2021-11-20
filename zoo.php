@@ -577,7 +577,7 @@
         function handleOldestAnimalPerBreedRequest() {
             global $db_conn; 
 
-            $result=executePlainSQL("SELECT b.breed, MAX(age) FROM Animals a, Breeds b WHERE a.breedID = b.breedID 
+            $result=executePlainSQL("SELECT b.breed, MAX(age) as \"MAX AGE\" FROM Animals a, Breeds b WHERE a.breedID = b.breedID 
                                     GROUP BY b.breed ORDER BY b.breed");
             $allAges=executePlainSQL("SELECT b.breed, a.age FROM Animals a, Breeds b WHERE a.breedID = b.breedID ORDER BY b.breed");
 
@@ -630,4 +630,3 @@
 		?>
 	</body>
 </html>
-
