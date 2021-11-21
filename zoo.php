@@ -1,13 +1,4 @@
-<!--Test Oracle file for UBC CPSC304 2018 Winter Term 1
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  Modified by Jessica Wong (2018-06-22)
-  This file shows the very basics of how to execute PHP commands
-  on Oracle.  
-  Specifically, it will drop a table, create a table, insert values
-  update values, and then query for values
- 
-  IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
+<!--File taken from Tutorial 7 and modified for CPSC 304 project
 
   The script assumes you already have a server set up
   All OCI commands are commands to the Oracle libraries
@@ -19,6 +10,10 @@
   <html>
     <head>
         <title>CPSC 304 Project - Zoo</title>
+        <link rel="stylesheet" href="zoo.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Roboto:wght@300&display=swap" rel="stylesheet">
     </head>
 
     <body>
@@ -33,18 +28,10 @@
 
         <hr />
 
-        <h2>Insert Values into Animals</h2>
+        <h2>Add a new animal</h2>
+        <h4 class="query">Insert Operation</h4>
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            <style type="text/css">
-            .tg  {border-collapse:collapse;border-spacing:0;}
-            .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-            overflow:hidden;padding:10px 5px;word-break:normal;}
-            .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-            .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-            .tg .tg-0lax{text-align:left;vertical-align:top}
-            </style>
             <table class="tg">
             <thead>
             <tr>
@@ -125,6 +112,7 @@
         <hr />
 
         <h2>Update Name in Animals - NOT DONE</h2>
+        <h4 class="query">Update Operation</h4>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
@@ -153,19 +141,10 @@
         
         <hr />
 
-        <h2>JOIN - Find who feeds an animal, what the animal eats, and when they need to be fed - filter amongst specific dates</h2>
+        <h2>Find who feeds an animal, what the animal eats, and when they need to be fed - filter amongst specific dates</h2>
+        <h4 class="query">Join Query</h4>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="joinTupleRequest" name="joinTupleRequest">
-
-            <style type="text/css">
-            .tg  {border-collapse:collapse;border-spacing:0;}
-            .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-            overflow:hidden;padding:10px 5px;word-break:normal;}
-            .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-            .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-            .tg .tg-0lax{text-align:left;vertical-align:top}
-            </style>
             <table class="tg">
             <thead>
             <tr>
@@ -185,7 +164,8 @@
 
         <hr />
 
-        <h2>Delete an Event</h2>
+        <h2>Remove an Event</h2>
+        <h4 class="query">Delete Operation</h4>
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="deleteRequest" name="deleteRequest">
             <label for="deleteMenu">Choose an Event to Delete</label>
@@ -201,7 +181,8 @@
 
         <hr />
         
-        <h2>Division - Find visitors who reserved all events</h2>
+        <h2>Find visitors who reserved all events</h2>
+        <h4 class="query">Division Query</h4>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="divisionRequest" name="divisionRequest">
             <input type="submit" name="divisionTuples"></p>
@@ -210,6 +191,7 @@
         <hr />
 
         <h2> Find Oldest Animal of Each Breed</h2>
+        <h4 class="query">Aggregation with Group By Query</h4>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="oldestAnimalPerBreedRequest" name="oldestAnimalPerBreedRequest">
             <input type="submit" name="oldestAnimalPerBreedTuples"></p>
@@ -217,7 +199,8 @@
 
         <hr />
 
-        <h2>Nested aggregation with group by - Find average age of animals for each enclosure where more than half of animals in enclosure have performed in some event</h2>
+        <h2>Find average age of animals for each enclosure where more than half of animals in enclosure have performed in some event</h2>
+        <h4 class="query">Nested Aggregation with Group By Query</h4>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
             <input type="submit" name="nestedAggregationTuples"></p>
