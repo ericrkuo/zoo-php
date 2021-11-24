@@ -247,7 +247,7 @@
 
         <hr />
 
-        <h2>Nested aggregation with group by - Find average age of animals for each enclosure where more than half of animals in enclosure have performed in some event</h2>
+        <h2>Nested aggregation with group by - Find average age of animals for each enclosure where half or more of animals in the enclosure have performed in some event</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
             <input type="submit" name="nestedAggregationTuples"></p>
@@ -547,7 +547,7 @@
             );
 
             $result = executeBoundSQL(
-                "SELECT A.animalID, E.employeeID, FS.supplyID,
+                "SELECT A.animalID, E.employeeID as feederID, FS.supplyID,
                         A.name as AnimalName,
                         E.firstName, E.lastName,
                         FS.name as SupplyName, 
@@ -564,6 +564,19 @@
             
             OCICommit($db_conn);
             printResult($result, "Result of JOIN between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
+
+            $result = executeBoundSQL(
+                "SELECT M.animalID, M.feederID, M.supplyID,
+                        TO_CHAR(M.dateTime, 'yyyy/mm/dd HH24:MI') as dateTime
+                FROM MadeUpOf M
+                WHERE TRUNC(M.dateTime) >= (TO_DATE(:bind1 , 'yyyy/mm/dd'))
+                AND TRUNC(M.dateTime) <= (TO_DATE(:bind2 , 'yyyy/mm/dd'))
+                ORDER BY M.animalID, M.dateTime"
+                , $alltuples
+            );
+            
+            printResult($result, "Unjoined - Feeding schedules from relation MadeUpOf between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
+
         }
 
         function handleDeleteRequest() {
