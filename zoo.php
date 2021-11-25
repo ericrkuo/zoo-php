@@ -852,10 +852,17 @@
                 array_push($SQLselectArray, "e.birthDate");
             }
 
+            if(isChecked('employeeAttributes', 'address')) {
+                $address  = $_POST['selectedAddress'];
+                if ($address != NULL) {
+                    array_push($SQLwhereArray, "e.address LIKE '%$address%'");
+                }   
+                array_push($SQLselectArray, "e.address");
+            }
+
             $attributes = [
                 // [htmlInputID, htmlSelectedAttribute, wherePrefix, selectExpression]
                 ['employeeID' , 'selectedEmployeeID' , "s.employeeID="   , "s.employeeID"] , 
-                ['address'    , 'selectedAddress'    , "e.address LIKE " , "e.address"]    , 
                 ['firstName'  , 'selectedFirstName'  , "e.firstName="    , "e.firstName"]  , 
                 ['lastName'   , 'selectedLastName'   , "e.lastName="     , "e.lastName"]   , 
                 ['email'      , 'selectedEmail'      , "e.email="        , "e.email"]      , 
