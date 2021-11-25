@@ -225,6 +225,66 @@
 
         <hr />
 
+        <h2>Select Information About Different Types of Employees</h2>
+        <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="selectRequest" name="selectRequest">
+            <p>
+                <label for="selectEmployeeTypeMenu">Select a Type of Employee:</label><br>
+                <input type="radio" id="Feeders" name="employeeType" value="Feeders">
+                <label for="Feeders">Feeders</label><br>
+                <input type="radio" id="Keepers" name="employeeType" value="Keepers">
+                <label for="Keepers">Keepers</label><br>
+                <input type="radio" id="Trainers" name="employeeType" value="Trainers">
+                <label for="Trainers">Trainers</label><br>
+                <input type="radio" id="Veterinarians" name="employeeType" value="Veterinarians">
+                <label for="Veterinarians">Veterinarians</label><br>
+            </p>
+
+            <p>
+                <?php
+                    $date=date('y-m-d');
+                ?>
+                <label for="selectEmployeeAttributesMenu">Select Attributes (Leave blank to allow for ANY value for an attribute):</label><br>
+                <input type="checkbox" id="employeeID" name="employeeAttributes[]" value="employeeID">
+                <label for="employeeID">EmployeeID</label>
+                <input type="number" id="selectedEmployeeID" name="selectedEmployeeID" min="0" max="999999"><br>
+
+                <input type="checkbox" id="address" name="employeeAttributes[]" value="address">
+                <label for="address">Address</label>
+                <input type="text" id="selectedAddress" name="selectedAddress"><br>
+
+                <input type="checkbox" id="firstName" name="employeeAttributes[]" value="firstName">
+                <label for="firstName">First Name</label>
+                <input type="text" id="selectedFirstName" name="selectedFirstName"><br>
+
+                <input type="checkbox" id="lastName" name="employeeAttributes[]" value="lastName">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="selectedLastName" name="selectedLastName"><br>
+
+                <input type="checkbox" id="email" name="employeeAttributes[]" value="email">
+                <label for="email">Email</label>
+                <input type="text" id="selectedEmail" name="selectedEmail"><br>
+
+                <input type="checkbox" id="phoneNumber" name="employeeAttributes[]" value="phoneNumber">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="selectedPhoneNumber" name="selectedPhoneNumber"><br>
+
+                <input type="checkbox" id="sin" name="employeeAttributes[]" value="sin">
+                <label for="sin">Social Insurance Number</label>
+                <input type="number" id="selectedSIN" name="selectedSIN" min="000000000" max="999999999"><br>
+
+                <input type="checkbox" id="birthDate" name="employeeAttributes[]" value="birthDate">
+                <label for="birthDateStart">Birthday is Between</label>
+                <input type="date" id="selectBirthdayStart" name="selectBirthdayStart" min="1900-01-01" 
+                max="$date">
+                <label for="birthDateEnd">and</label>
+                <input type="date" id="selectBirthdayEnd" name="selectBirthdayEnd" min="1900-01-01" 
+                max="$date"><br>
+
+            </p>
+            <input type="submit" name="selectTuples"></p>
+        </form>
+
         <?php
         include('environment.php');
 
@@ -352,6 +412,19 @@
 
             debugAlertMessage("Disconnect from Database");
             OCILogoff($db_conn);
+        }
+
+        //Using this to help filter what user selected for Selection Query 
+        //https://html.form.guide/php-form/php-form-checkbox/
+        function isChecked($chkname, $value) {
+            if(!empty($_POST[$chkname])) {
+                foreach($_POST[$chkname] as $chkval) {
+                    if ($chkval == $value) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         function handleUpdateRequest() {
@@ -636,6 +709,43 @@
 
             printResult($result, "All animals, their enclosures, and what events featured in");
         }
+        
+        //Incorporating HTML inside of PHP code using echo
+        //Source: https://stackoverflow.com/questions/18140270/how-to-write-html-code-inside-php-i-want-write-html-code-within-the-php-sc
+        function handleSelectRequest() {
+            global $db_conn;
+            $selectedAttributes = [];
+
+            if(isChecked('employeeAttributes','employeeID')) {
+                //Allow user to check for specific ID number
+                $employeeID = $_POST['selectedEmployeeID'];
+                array_push($selectedAttributes, $employeeID);
+                echo $selectedAttributes;
+            } 
+            if(isChecked('employeeAttributes', 'address')) {
+                //Allow user to check for address containing  specific string
+            }
+            if(isChecked('employeeAttributes', 'firstName')) {
+                //Allow user to check for name containing specific string
+            }
+            if(isChecked('employeeAttributes', 'lastName')) {
+                //Allow user to check for name containing specific string
+            }
+            if(isChecked('employeeAttributes', 'email')) {
+                //Allow user to check for email containing specific string
+            }
+            if(isChecked('employeeAttributes', 'phoneNumber')) {
+                //Allow user to check for specific phone number
+            }
+            if(isChecked('employeeAttributes', 'sin')) {
+                //Allow user to check for specific sin number
+            }
+            if(isChecked('employeeAttributes', 'birthDate')) {
+                //Allow user to check for range of birthdate 
+            }
+            
+            //$result = executePlainSQL(SELECT)
+        }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
@@ -679,6 +789,9 @@
         }
         else if (requestValid($_GET, 'nestedAggregationTuples', 'nestedAggregationRequest')) {
             handleRequest('handleNestedAggregationRequest');
+        }
+        else if (requestValid($_POST, 'selectTuples', 'selectRequest')) {
+            handleRequest('handleSelectRequest');
         }
 		?>
 	</body>
