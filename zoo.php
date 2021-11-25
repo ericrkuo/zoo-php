@@ -471,7 +471,7 @@
             //If has more or less than 10 numbers in input NOT a valid phone number
             //return empty string
             if (strlen($newString) != 10) {
-                return '';
+                throw new Exception("Invalid phone number, make sure format follows 123-456-1111");
             }
 
             return substr($newString, 0, 3) . '-' . substr($newString, 3, 3) . '-' . substr($newString, 6);
@@ -808,168 +808,93 @@
         function handleSelectRequest() {
             global $db_conn;
 
-            $SQLselectString = '';
+            $SQLselectArray = [];
+            $SQLwhereArray = [];
             $SQLfromString = $_POST['employeeType'];
-            $SQLwhereString = '';
-            if ($SQLfromString != NULL) {
-           
+            
+            if ($SQLfromString == NULL) {
+                echo 'No Employee Type Selected';
+                return;
+            }
 
-                if(isChecked('employeeAttributes','employeeID')) {
-                    //Allow user to check for specific ID number
-                    $employeeID = $_POST['selectedEmployeeID'];
-                    if ($employeeID !=NULL) {
-                        $SQLwhereString .= "s.employeeID=$employeeID";
-                    }
-                    $SQLselectString .= "s.employeeID";
-                } 
-                if(isChecked('employeeAttributes', 'address')) {
-                    //Allow user to check for address containing  specific string
-                    $address = $_POST['selectedAddress'];
-                    if ($address != NULL) {
-                        if($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.address LIKE '%$address%'";
-                        } else {
-                            $SQLwhereString .= "e.address LIKE '%$address%'";
-                        }
-                    }
+            if(isChecked('employeeAttributes', 'phoneNumber')) {
+                //Allow user to check for specific phone number
+                $phoneNumber = $_POST['selectedPhoneNumber'];
 
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.address";
-                    } else {
-                        $SQLselectString .= "e.address";
-                    }
-                }
-                if(isChecked('employeeAttributes', 'firstName')) {
-                    //Allow user to check for employees with given firstName
-                    $firstName = $_POST['selectedFirstName'];
-                    if ($firstName != NULL) {
-                        if ($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.firstName = '$firstName'";
-                        } else {
-                            $SQLwhereString .= "e.firstName = '$firstName'";
-                        }
-                    }
-
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.firstName";
-                    } else {
-                        $SQLselectString .= "e.firstName";
-                    }
-                }
-                if(isChecked('employeeAttributes', 'lastName')) {
-                    //Allow user to check for name containing specific string
-                    $lastName = $_POST['selectedLastName'];
-                    if ($lastName != NULL) {
-                        if ($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.lastName = '$lastName'";
-                        } else {
-                            $SQLwhereString .= "e.lastName = '$lastName'";
-                        }
-                    }
-
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.lastName";
-                    } else {
-                        $SQLselectString .= "e.lastName";
-                    }
-                    
-                }
-                if(isChecked('employeeAttributes', 'email')) {
-                    //Allow user to check for email containing specific string
-                    $email = $_POST['selectedEmail'];
-                    if ($email != NULL) {
-                        if ($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.email = '$email'";
-                        } else {
-                            $SQLwhereString .= "e.email = '$email'";
-                        }
-                    }
-
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.email";
-                    } else {
-                        $SQLselectString .= "e.email";
-                    }
-                }
-                if(isChecked('employeeAttributes', 'phoneNumber')) {
-                    //Allow user to check for specific phone number
-                    $phoneNumber = $_POST['selectedPhoneNumber'];
-                    $formattedPhoneNumber = isPhoneNumber($phoneNumber);
-                    if ($formattedPhoneNumber != '') {
-                        if ($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.phoneNumber = '$formattedPhoneNumber'";
-                        } else { 
-                            $SQLwhereString .= "e.phoneNumber = '$formattedPhoneNumber'";
-                        }
-
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.phoneNumber";
-                    } else {
-                        $SQLselectString .= "e.phoneNumber";
-                    }
+                if ($phoneNumber == NULL) {
+                    array_push($SQLselectArray, "e.phoneNumber");
                 } else {
-                    echo 'Invalid Phone Number';
+                    try {
+                        $formattedPhoneNumber = isPhoneNumber($phoneNumber);
+                        if ($formattedPhoneNumber != '') {
+                            array_push($SQLwhereArray, "e.phoneNumber = '$formattedPhoneNumber'");
+                            array_push($SQLselectArray, "e.phoneNumber");
+                        }
+                    } catch (Exception $e) {
+                        echo $e->getMessage(), "\n";
+                        return;
+                    }
                 }
             }
-                
-                if(isChecked('employeeAttributes', 'sin')) {
+
+            if(isChecked('employeeAttributes', 'birthDate')) {
+                //Allow user to check for range of birthdate 
+                $startDate  = $_POST['selectBirthdayStart'];
+                $endDate = $_POST['selectBirthdayEnd'];
+            
+                //$startDate and $endDate should be of format Date 
+                //e.birthdate should be in format Date (yyyy/mm/dd)
+
+                if ($startDate != NULL && $endDate != NULL) {
+                    array_push($SQLwhereArray, "e.birthDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.birthDate <= to_date('$endDate', 'yyyy-mm-dd')");
+                }   
+
+                array_push($SQLselectArray, "e.birthDate");
+            }
+
+            $attributes = [
+                // [htmlInputID, htmlSelectedAttribute, wherePrefix, selectExpression]
+                ['employeeID' , 'selectedEmployeeID' , "s.employeeID="   , "s.employeeID"] , 
+                ['address'    , 'selectedAddress'    , "e.address LIKE " , "e.address"]    , 
+                ['firstName'  , 'selectedFirstName'  , "e.firstName="    , "e.firstName"]  , 
+                ['lastName'   , 'selectedLastName'   , "e.lastName="     , "e.lastName"]   , 
+                ['email'      , 'selectedEmail'      , "e.email="        , "e.email"]      , 
+                ['sin'        , 'selectedSIN'        , "e.sin="          , "e.sin"]        , 
+            ];
+
+            foreach ($attributes as $attribute) {
+                $htmlInputID = $attribute[0];
+                $htmlSelectedAttribute = $attribute[1];
+                $wherePrefix = $attribute[2];
+                $selectExpression = $attribute[3];
+
+                if(isChecked('employeeAttributes', $htmlInputID)) {
                     //Allow user to check for specific sin number
-                    $sin = $_POST['selectedSIN'];
-                    if ($sin != NULL) {
-                        if ($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.sin = '$sin'";
-                        } else {
-                            $SQLwhereString .= "e.sin = '$sin'";
-                        }
+                    $attributeValue = $_POST[$htmlSelectedAttribute];
+                    if ($attributeValue != NULL) {
+                        array_push($SQLwhereArray, "$wherePrefix '$attributeValue'");
                     }
-
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.sin";
-                    } else {
-                        $SQLselectString .= "e.sin";
-                    }
-                }
-
-                if(isChecked('employeeAttributes', 'birthDate')) {
-                    //Allow user to check for range of birthdate 
-                    $startDate  = $_POST['selectBirthdayStart'];
-                    $endDate = $_POST['selectBirthdayEnd'];
-                
-                    //$startDate and $endDate should be of format Date 
-                    //e.birthdate should be in format Date (yyyy/mm/dd)
-
-                    if ($startDate != NULL && $endDate != NULL) {
-                        if ($SQLwhereString != '') {
-                            $SQLwhereString .= " AND e.birthDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.birthDate <= to_date('$endDate', 'yyyy-mm-dd')";
-                        } else {
-                            $SQLwhereString .= "e.birthDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.birthDate <= to_date('$endDate', 'yyyy-mm-dd')";
-                    }
-                }
-
-                    if ($SQLselectString != '') {
-                        $SQLselectString .= ", e.birthDate";
-                    } else {
-                        $SQLselectString .= "e.birthDate";
-                    }
-                }
-                
-                //Case 1: Select is null -> return nothing
-                //Case 2: Select is NOT null but Where is null -> return SELECT $SQLselectString ... FROM just check ids of join
-                //Case 3: Neither are NULL -> return SELECT $SQLselectString .. FROM check ids AND $sqlWhereString
-
-                if ($SQLselectString =='') {
-                    echo 'No Attributes Selected';
-                } else if($SQLwhereString == '') {
-                    $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString s, Employees e WHERE s.employeeID = e.employeeID");
-                } else {
-                    $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString s, Employees e WHERE s.employeeID = e.employeeID AND $SQLwhereString");
-                }
-                printResult($result, "Selected Data");
-            } else {
-                 echo 'No Employee Type Selected';
+    
+                    array_push($SQLselectArray, $selectExpression);
                 }
             }
-          
+
+            array_push($SQLwhereArray, "s.employeeID = e.employeeID");
+            $SQLselectString = implode(', ', array_filter($SQLselectArray));
+            $SQLwhereString = implode(' AND ', array_filter($SQLwhereArray));
+
+            if ($SQLselectString =='') {
+                echo 'No Attributes Selected';
+            } else {
+                // uncomment for debugging
+                // echo $SQLselectString;
+                // echo '<br/>';
+                // echo $SQLwhereString;
+
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString s, Employees e WHERE $SQLwhereString");
+                printResult($result, "Selected Data for table $SQLfromString");
+            }
+        }
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
