@@ -250,7 +250,7 @@
                 <input type="number" id="selectedEmployeeID" name="selectedEmployeeID" min="0" max="999999"><br>
 
                 <input type="checkbox" id="address" name="employeeAttributes[]" value="address">
-                <label for="address">Address</label>
+                <label for="address">Address (Input a partial or full address to narrow down search)</label>
                 <input type="text" id="selectedAddress" name="selectedAddress"><br>
 
                 <input type="checkbox" id="firstName" name="employeeAttributes[]" value="firstName">
@@ -425,6 +425,30 @@
                 }
             }
             return false;
+        }
+
+        function isPhoneNumber($phoneNumber) {
+            $length = strlen($phoneNumber);
+            $newString = '';
+
+            //Remove all non-numeric characters from input string
+            for ($index = 0; $index < $length; $index++) {
+                if (is_numeric($phoneNumber[$index])) {
+                    $newString .= "$phoneNumber[$index]";
+                }
+            }
+
+            //If has more or less than 10 numbers in input NOT a valid phone number
+            //return empty string
+            if (strlen($newString) != 10) {
+                return '';
+            }
+
+            return substr($newString, 0, 3) . '-' . substr($newString, 3, 3) . '-' . substr($newString, 6);
+        }
+
+        function convertToDate($dateString) {
+            return TO_DATE('$dateString', 'yyyy-mm-dd');
         }
 
         function handleUpdateRequest() {
@@ -714,38 +738,167 @@
         //Source: https://stackoverflow.com/questions/18140270/how-to-write-html-code-inside-php-i-want-write-html-code-within-the-php-sc
         function handleSelectRequest() {
             global $db_conn;
-            $selectedAttributes = [];
 
-            if(isChecked('employeeAttributes','employeeID')) {
-                //Allow user to check for specific ID number
-                $employeeID = $_POST['selectedEmployeeID'];
-                array_push($selectedAttributes, $employeeID);
-                echo $selectedAttributes;
-            } 
-            if(isChecked('employeeAttributes', 'address')) {
-                //Allow user to check for address containing  specific string
+            $SQLselectString = '';
+            $SQLfromString = $_POST['employeeType'];
+            $SQLwhereString = '';
+            if ($SQLfromString != NULL) {
+           
+
+                if(isChecked('employeeAttributes','employeeID')) {
+                    //Allow user to check for specific ID number
+                    $employeeID = $_POST['selectedEmployeeID'];
+                    if ($employeeID !=NULL) {
+                        $SQLwhereString .= "s.employeeID=$employeeID";
+                    }
+                    $SQLselectString .= "s.employeeID";
+                } 
+                if(isChecked('employeeAttributes', 'address')) {
+                    //Allow user to check for address containing  specific string
+                    $address = $_POST['selectedAddress'];
+                    if ($address != NULL) {
+                        if($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.address LIKE '%$address%'";
+                        } else {
+                            $SQLwhereString .= "e.address LIKE '%$address%'";
+                        }
+                    }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.address";
+                    } else {
+                        $SQLselectString .= "e.address";
+                    }
+                }
+                if(isChecked('employeeAttributes', 'firstName')) {
+                    //Allow user to check for employees with given firstName
+                    $firstName = $_POST['selectedFirstName'];
+                    if ($firstName != NULL) {
+                        if ($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.firstName = '$firstName'";
+                        } else {
+                            $SQLwhereString .= "e.firstName = '$firstName'";
+                        }
+                    }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.firstName";
+                    } else {
+                        $SQLselectString .= "e.firstName";
+                    }
+                }
+                if(isChecked('employeeAttributes', 'lastName')) {
+                    //Allow user to check for name containing specific string
+                    $lastName = $_POST['selectedLastName'];
+                    if ($lastName != NULL) {
+                        if ($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.lastName = '$lastName'";
+                        } else {
+                            $SQLwhereString .= "e.lastName = '$lastName'";
+                        }
+                    }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.lastName";
+                    } else {
+                        $SQLselectString .= "e.lastName";
+                    }
+                    
+                }
+                if(isChecked('employeeAttributes', 'email')) {
+                    //Allow user to check for email containing specific string
+                    $email = $_POST['selectedEmail'];
+                    if ($email != NULL) {
+                        if ($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.email = '$email'";
+                        } else {
+                            $SQLwhereString .= "e.email = '$email'";
+                        }
+                    }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.email";
+                    } else {
+                        $SQLselectString .= "e.email";
+                    }
+                }
+                if(isChecked('employeeAttributes', 'phoneNumber')) {
+                    //Allow user to check for specific phone number
+                    $phoneNumber = $_POST['selectedPhoneNumber'];
+                    $formattedPhoneNumber = isPhoneNumber($phoneNumber);
+                    if ($formattedPhoneNumber != '') {
+                        if ($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.phoneNumber = '$formattedPhoneNumber'";
+                        } else { 
+                            $SQLwhereString .= "e.phoneNumber = '$formattedPhoneNumber'";
+                        }
+                    }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.phoneNumber";
+                    } else {
+                        $SQLselectString .= "e.phoneNumber";
+                    }
+                }
+                
+                if(isChecked('employeeAttributes', 'sin')) {
+                    //Allow user to check for specific sin number
+                    $sin = $_POST['selectedSIN'];
+                    if ($sin != NULL) {
+                        if ($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.sin = '$sin'";
+                        } else {
+                            $SQLwhereString .= "e.sin = '$sin'";
+                        }
+                    }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.sin";
+                    } else {
+                        $SQLselectString .= "e.sin";
+                    }
+                }
+
+                if(isChecked('employeeAttributes', 'birthDate')) {
+                    //Allow user to check for range of birthdate 
+                    $startDate  = $_POST['selectBirthdayStart'];
+                    $endDate = $_POST['selectBirthdayEnd'];
+                
+                    //$startDate and $endDate should be of format Date 
+                    //e.birthdate should be in format Date (yyyy/mm/dd)
+
+                    if ($startDate != NULL && $endDate != NULL) {
+                        if ($SQLwhereString != '') {
+                            $SQLwhereString .= " AND e.birthDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.birthDate <= to_date('$endDate', 'yyyy-mm-dd')";
+                        } else {
+                            $SQLwhereString .= "e.birthDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.birthDate <= to_date('$endDate', 'yyyy-mm-dd')";
+                    }
+                }
+
+                    if ($SQLselectString != '') {
+                        $SQLselectString .= ", e.birthDate";
+                    } else {
+                        $SQLselectString .= "e.birthDate";
+                    }
+                }
+                
+                //Case 1: Select is null -> return nothing
+                //Case 2: Select is NOT null but Where is null -> return SELECT $SQLselectString ... FROM just check ids of join
+                //Case 3: Neither are NULL -> return SELECT $SQLselectString .. FROM check ids AND $sqlWhereString
+
+                if ($SQLselectString =='') {
+                    echo 'No Attributes Selected';
+                } else if($SQLwhereString == '') {
+                    $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString s, Employees e WHERE s.employeeID = e.employeeID");
+                } else {
+                    $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString s, Employees e WHERE s.employeeID = e.employeeID AND $SQLwhereString");
+                }
+                printResult($result, "Selected Data");
+            } else {
+                 echo 'No Employee Type Selected';
+                }
             }
-            if(isChecked('employeeAttributes', 'firstName')) {
-                //Allow user to check for name containing specific string
-            }
-            if(isChecked('employeeAttributes', 'lastName')) {
-                //Allow user to check for name containing specific string
-            }
-            if(isChecked('employeeAttributes', 'email')) {
-                //Allow user to check for email containing specific string
-            }
-            if(isChecked('employeeAttributes', 'phoneNumber')) {
-                //Allow user to check for specific phone number
-            }
-            if(isChecked('employeeAttributes', 'sin')) {
-                //Allow user to check for specific sin number
-            }
-            if(isChecked('employeeAttributes', 'birthDate')) {
-                //Allow user to check for range of birthdate 
-            }
-            
-            //$result = executePlainSQL(SELECT)
-        }
+          
 
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
