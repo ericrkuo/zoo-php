@@ -133,10 +133,46 @@
 
         <hr />
 
-        <h2>Display the Tuples in Animals</h2>
+        <h2>Display the Tuples for the Specified Table</h2>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="displayTupleRequest" name="displayTupleRequest">
+            <select name="tableName">
+                <?php
+                    include('environment.php');
+                    handleRequest('handleGetTableNames');
+                ?>
+            </select>
             <input type="submit" name="displayTuples"></p>
+        </form>
+        
+        <hr />
+
+        <h3>Select the attributes to be projected for Enclosures</h3>
+        <h4 class="query">Project Query</h4>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="checkbox" id="Type" name="Type" value="b.type">
+            <label for="Type">Type</label><br>
+            
+            <input type="checkbox" id="Temperature" name="Temperature" value="b.temperature">
+            <label for="Temperature">Temperature</label><br>
+            
+            <input type="checkbox" id="Humidity" name="Humidity" value="b.humidity">
+            <label for="Humidity">Humidity</label><br>
+
+            <input type="checkbox" id="EnclosureID" name="EnclosureID" value="e.enclosureID">
+            <label for="EnclosureID">EnclosureID</label><br>
+
+            <input type="checkbox" id="Name" name="Name" value="e.name">
+            <label for="Name">Name</label><br>
+
+            <input type="checkbox" id="SquareFt" name="SquareFt" value="ed.squareFt">
+            <label for="SquareFt">SquareFt</label><br>
+            
+            <input type="checkbox" id="Capacity" name="Capacity" value="ed.capacity">
+            <label for="Capacity">Capacity</label><br><br>
+
+            <input type="hidden" id="projectRequest" name="projectRequest">
+            <input type="submit" name="projectTuples"></p>
         </form>
         
         <hr />
@@ -201,7 +237,7 @@
 
         <hr />
 
-        <h2>Find average age of animals for each enclosure where more than half of animals in enclosure have performed in some event</h2>
+        <h2>Find average age of animals for each enclosure where half or more of animals in the enclosure have performed in some event</h2>
         <h4 class="query">Nested Aggregation with Group By Query</h4>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="nestedAggregationRequest" name="nestedAggregationRequest">
@@ -455,12 +491,47 @@
             }
         }
 
+        function handleGetTableNames() {
+            global $db_conn;
+            $result = executePlainSQL("SELECT * FROM user_tables");
+            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
+            {
+                echo "<option value=\" ". $row['TABLE_NAME'] . " \">" . $row['TABLE_NAME'] . "</option>";
+            }
+        }
+
         function handleDisplayRequest() {
             global $db_conn;
 
-            $result = executePlainSQL("SELECT * FROM Animals");
+            $result = executePlainSQL("SELECT * FROM " . $_GET['tableName']);
 
-            printResult($result, "Retrieved data from table Animals:");
+            printResult($result, "Retrieved data from table " . $_GET['tableName'] . ":");
+        }
+
+        function handleProjectRequest() {
+            global $db_conn;
+            
+            $type = $_GET['Type'];
+            $temperature = $_GET['Temperature'];
+            $humidity = $_GET['Humidity'];
+            $enclosureID = $_GET['EnclosureID'];
+            $name = $_GET['Name'];
+            $squareFt = $_GET['SquareFt'];
+            $capacity = $_GET['Capacity'];
+
+            $project = [$type, $temperature, $humidity, $enclosureID, $name, $squareFt, $capacity];
+            $project = implode(', ', array_filter($project));
+
+            if (empty($project)) {
+                $project = '*';
+            }
+
+            $result = executePlainSQL(
+                "SELECT " . $project .
+                " FROM Biomes b, Enclosures e, EnclosureDimensions ed
+                WHERE b.type = ed.type and e.squareFt = ed.squareFt and e.type = ed.type");
+
+            printResult($result, "Projection result on Enclosures");
         }
 
         function handleJoinRequest() {
@@ -476,7 +547,7 @@
             );
 
             $result = executeBoundSQL(
-                "SELECT A.animalID, E.employeeID, FS.supplyID,
+                "SELECT A.animalID, E.employeeID as feederID, FS.supplyID,
                         A.name as AnimalName,
                         E.firstName, E.lastName,
                         FS.name as SupplyName, 
@@ -493,6 +564,19 @@
             
             OCICommit($db_conn);
             printResult($result, "Result of JOIN between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
+
+            $result = executeBoundSQL(
+                "SELECT M.animalID, M.feederID, M.supplyID,
+                        TO_CHAR(M.dateTime, 'yyyy/mm/dd HH24:MI') as dateTime
+                FROM MadeUpOf M
+                WHERE TRUNC(M.dateTime) >= (TO_DATE(:bind1 , 'yyyy/mm/dd'))
+                AND TRUNC(M.dateTime) <= (TO_DATE(:bind2 , 'yyyy/mm/dd'))
+                ORDER BY M.animalID, M.dateTime"
+                , $alltuples
+            );
+            
+            printResult($result, "Unjoined - Feeding schedules from relation MadeUpOf between " . $_GET['fromDate'] . " and " . $_GET['toDate']);
+
         }
 
         function handleDeleteRequest() {
@@ -664,6 +748,9 @@
         }
         else if (requestValid($_GET, 'nestedAggregationTuples', 'nestedAggregationRequest')) {
             handleRequest('handleNestedAggregationRequest');
+        }
+        else if (requestValid($_GET, 'projectTuples', 'projectRequest')) {
+            handleRequest('handleProjectRequest');
         }
 		?>
 	</body>
