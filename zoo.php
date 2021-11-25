@@ -901,14 +901,16 @@
                         } else { 
                             $SQLwhereString .= "e.phoneNumber = '$formattedPhoneNumber'";
                         }
-                    }
 
                     if ($SQLselectString != '') {
                         $SQLselectString .= ", e.phoneNumber";
                     } else {
                         $SQLselectString .= "e.phoneNumber";
                     }
+                } else {
+                    echo 'Invalid Phone Number';
                 }
+            }
                 
                 if(isChecked('employeeAttributes', 'sin')) {
                     //Allow user to check for specific sin number
