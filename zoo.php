@@ -474,10 +474,10 @@
 
         function handleGetEventsRequest() {
             global $db_conn;
-            $result = executePlainSQL("SELECT eventID, name FROM EVENTS ORDER BY name");
+            $result = executePlainSQL("SELECT eventID, startTime, name FROM EVENTS ORDER BY name, startTime");
             while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
             {
-                echo "<option value=\" ". $row['EVENTID'] . " \">" . $row['NAME'] . "</option>";
+                echo "<option value=\" ". $row['EVENTID'] . " \">" . $row['NAME'] . " - " . $row['STARTTIME']  . "</option>";
             }
         }
 
