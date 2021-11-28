@@ -493,10 +493,10 @@
 
         function handleGetTableNames() {
             global $db_conn;
-            $result = executePlainSQL("SELECT * FROM user_tables");
+            $result = executePlainSQL("SELECT table_name, LOWER(table_name) as displayName FROM user_tables ORDER BY table_name");
             while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
             {
-                echo "<option value=\" ". $row['TABLE_NAME'] . " \">" . $row['TABLE_NAME'] . "</option>";
+                echo "<option value=\"". $row['TABLE_NAME'] . " \">" . $row['DISPLAYNAME'] . "</option>";
             }
         }
 
