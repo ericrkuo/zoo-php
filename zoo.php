@@ -247,6 +247,7 @@
         <hr />
 
         <h2>Select Information From Different Tables</h2>
+        <h4 class="query">Select Query</h4>
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="selectRequest" name="selectRequest">
             <p>
@@ -270,6 +271,8 @@
             </p>
             <input type="submit" name="selectTuples">
         </form>
+
+        <hr />
 
         <?php
         include('environment.php');
@@ -351,7 +354,7 @@
         }
 
         function printResult($result, $message) { //prints results from a select statement
-            echo "<br>" . $message . "<br>";
+            echo $message . "<br>";
 
             // https://stackoverflow.com/questions/2970936/how-to-echo-out-table-rows-from-the-db-php
             echo("<table border='1'>");
