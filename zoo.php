@@ -255,11 +255,11 @@
 
         <hr />
 
-        <h2>Select Information About Different Types of Employees</h2>
+        <h2>Select Information From Different Tables</h2>
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="selectRequest" name="selectRequest">
             <p>
-                <label for="selectEmployeeTypeMenu">Select a Type of Employee:</label><br>
+                <!-- <label for="selectEmployeeTypeMenu">Select a Type of Employee:</label><br>
                 <input type="radio" id="Feeders" name="employeeType" value="Feeders">
                 <label for="Feeders">Feeders</label><br>
                 <input type="radio" id="Keepers" name="employeeType" value="Keepers">
@@ -267,14 +267,26 @@
                 <input type="radio" id="Trainers" name="employeeType" value="Trainers">
                 <label for="Trainers">Trainers</label><br>
                 <input type="radio" id="Veterinarians" name="employeeType" value="Veterinarians">
-                <label for="Veterinarians">Veterinarians</label><br>
+                <label for="Veterinarians">Veterinarians</label><br> 
+             //Tables will be Employees, Visitors, VisitorRecords, FoodSupplies, and Enclosures-->
+                <label for="selectTableMenu">Select a Table:</label><br>
+                <input type="radio" id="Employees" name="tableType" value="Employees">
+                <label for="Employees">Employees</label><br>
+                <input type="radio" id="Visitors" name="tableType" value="Visitors">
+                <label for="Employees">Visitors</label><br>
+                <input type="radio" id="VisitorRecords" name="tableType" value="VisitorRecords">
+                <label for="Employees">VisitorRecords</label><br>
+                <input type="radio" id="FoodSupplies" name="tableType" value="FoodSupplies">
+                <label for="Employees">FoodSupplies</label><br>
+                <input type="radio" id="Enclosures" name="tableType" value="Enclosures">
+                <label for="Employees">Enclosures</label><br>
             </p>
 
             <p>
                 <?php
                     $date=date('y-m-d');
                 ?>
-                <label for="selectEmployeeAttributesMenu">Select Attributes (Leave blank to allow for ANY value for an attribute):</label><br>
+                <!-- <label for="selectEmployeeAttributesMenu">Select Attributes (Leave blank to allow for ANY value for an attribute):</label><br>
                 <input type="checkbox" id="employeeID" name="employeeAttributes[]" value="employeeID">
                 <label for="employeeID">EmployeeID</label>
                 <input type="number" id="selectedEmployeeID" name="selectedEmployeeID" min="0" max="999999"><br>
@@ -312,6 +324,7 @@
                 max="$date"><br>
 
             </p>
+            <input type="submit" name="selectTuples"></p> -->
             <input type="submit" name="selectTuples"></p>
         </form>
 
@@ -802,16 +815,13 @@
 
             printResult($result, "All animals, their enclosures, and what events featured in");
         }
-        
-        //Incorporating HTML inside of PHP code using echo
-        //Source: https://stackoverflow.com/questions/18140270/how-to-write-html-code-inside-php-i-want-write-html-code-within-the-php-sc
-        function handleSelectRequest() {
-            global $db_conn;
 
+        function handleSelectEmployeesRequest() {
+            global $db_conn;
             $SQLselectArray = [];
             $SQLwhereArray = [];
             $SQLfromString = $_POST['employeeType'];
-            
+
             if ($SQLfromString == NULL) {
                 echo 'No Employee Type Selected';
                 return;
@@ -903,6 +913,525 @@
             }
         }
 
+        function handleSelectVisitorsRequest() {
+            global $db_conn;
+            $SQLselectArray = [];
+            $SQLwhereArray = [];
+            $SQLfromString = "Visitors";
+
+            if(isChecked('visitorAttributes', 'phoneNumber')) {
+                //Allow user to check for specific phone number
+                $phoneNumber = $_POST['selectedPhoneNumber'];
+
+                if ($phoneNumber == NULL) {
+                    array_push($SQLselectArray, "e.phoneNumber");
+                } else {
+                    try {
+                        $formattedPhoneNumber = isPhoneNumber($phoneNumber);
+                        if ($formattedPhoneNumber != '') {
+                            array_push($SQLwhereArray, "e.phoneNumber = '$formattedPhoneNumber'");
+                            array_push($SQLselectArray, "e.phoneNumber");
+                        }
+                    } catch (Exception $e) {
+                        echo $e->getMessage(), "\n";
+                        return;
+                    }
+                }
+            }
+
+            if(isChecked('visitorAttributes', 'birthDate')) {
+                //Allow user to check for range of birthdate 
+                $startDate  = $_POST['selectBirthdayStart'];
+                $endDate = $_POST['selectBirthdayEnd'];
+            
+                //$startDate and $endDate should be of format Date 
+                //e.birthdate should be in format Date (yyyy/mm/dd)
+
+                if ($startDate != NULL && $endDate != NULL) {
+                    array_push($SQLwhereArray, "e.birthDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.birthDate <= to_date('$endDate', 'yyyy-mm-dd')");
+                }   
+
+                array_push($SQLselectArray, "e.birthDate");
+            }
+
+            if(isChecked('visitorAttributes', 'address')) {
+                $address  = $_POST['selectedAddress'];
+                if ($address != NULL) {
+                    array_push($SQLwhereArray, "e.address LIKE '%$address%'");
+                }   
+                array_push($SQLselectArray, "e.address");
+            }
+
+            $attributes = [
+                // [htmlInputID, htmlSelectedAttribute, wherePrefix, selectExpression]
+                ['visitorID' , 'selectedVisitorID' , "e.visitorID="   , "e.visitorID"] , 
+                ['firstName'  , 'selectedFirstName'  , "e.firstName="    , "e.firstName"]  , 
+                ['lastName'   , 'selectedLastName'   , "e.lastName="     , "e.lastName"]   , 
+                ['email'      , 'selectedEmail'      , "e.email="        , "e.email"]      , 
+            ];
+
+            foreach ($attributes as $attribute) {
+                $htmlInputID = $attribute[0];
+                $htmlSelectedAttribute = $attribute[1];
+                $wherePrefix = $attribute[2];
+                $selectExpression = $attribute[3];
+
+                if(isChecked('visitorAttributes', $htmlInputID)) {
+                    //Allow user to check for specific sin number
+                    $attributeValue = $_POST[$htmlSelectedAttribute];
+                    if ($attributeValue != NULL) {
+                        array_push($SQLwhereArray, "$wherePrefix '$attributeValue'");
+                    }
+    
+                    array_push($SQLselectArray, $selectExpression);
+                }
+            }
+
+
+            //array_push($SQLwhereArray, "s.visitorID = e.visitorID");
+            $SQLselectString = implode(', ', array_filter($SQLselectArray));
+            $SQLwhereString = implode(' AND ', array_filter($SQLwhereArray));
+
+            if ($SQLselectString =='') {
+                echo 'No Attributes Selected';
+            } else  if ($SQLwhereString == '') {
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e");
+            } else {
+                // uncomment for debugging
+                // echo $SQLselectString;
+                // echo '<br/>';
+                // echo $SQLwhereString;
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e WHERE $SQLwhereString");
+            }
+            printResult($result, "Selected Data for table $SQLfromString");
+        }
+
+        function handleSelectVisitorRecordsRequest() {
+            global $db_conn;
+            $SQLselectArray = [];
+            $SQLwhereArray = [];
+            $SQLfromString = "VisitorRecords";
+
+            if(isChecked('visitorRecordsAttributes', 'visitDate')) {
+                //Allow user to check for range of birthdate 
+                $startDate  = $_POST['selectVisitDateStart'];
+                $endDate = $_POST['selectVisitDateEnd'];
+            
+                //$startDate and $endDate should be of format Date 
+                //e.birthdate should be in format Date (yyyy/mm/dd)
+
+                if ($startDate != NULL && $endDate != NULL) {
+                    array_push($SQLwhereArray, "e.visitDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.visitDate <= to_date('$endDate', 'yyyy-mm-dd')");
+                }   
+
+                array_push($SQLselectArray, "e.visitDate");
+            }
+
+            $attributes = [
+                // [htmlInputID, htmlSelectedAttribute, wherePrefix, selectExpression]
+                ['visitorID' , 'selectedVisitorID' , "e.visitorID="   , "e.visitorID"] , 
+                ['recordID'  , 'selectedRecordID'  , "e.recordID="    , "e.recordID"]  , 
+            ];
+
+            foreach ($attributes as $attribute) {
+                $htmlInputID = $attribute[0];
+                $htmlSelectedAttribute = $attribute[1];
+                $wherePrefix = $attribute[2];
+                $selectExpression = $attribute[3];
+
+                if(isChecked('visitorRecordsAttributes', $htmlInputID)) {
+                    //Allow user to check for specific sin number
+                    $attributeValue = $_POST[$htmlSelectedAttribute];
+                    if ($attributeValue != NULL) {
+                        array_push($SQLwhereArray, "$wherePrefix '$attributeValue'");
+                    }
+    
+                    array_push($SQLselectArray, $selectExpression);
+                }
+            }
+
+
+            array_push($SQLwhereArray, "s.visitorID = e.visitorID");
+            $SQLselectString = implode(', ', array_filter($SQLselectArray));
+            $SQLwhereString = implode(' AND ', array_filter($SQLwhereArray));
+
+            if ($SQLselectString =='') {
+                echo 'No Attributes Selected';
+            } else {
+                // uncomment for debugging
+                // echo $SQLselectString;
+                // echo '<br/>';
+                // echo $SQLwhereString;
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e, Visitors s WHERE $SQLwhereString");
+            }
+            printResult($result, "Selected Data for table $SQLfromString");
+        }
+
+        function handleSelectFoodSuppliesRequest() {
+            global $db_conn;
+            $SQLselectArray = [];
+            $SQLwhereArray = [];
+            $SQLfromString = "FoodSupplies";
+
+            if(isChecked('foodSuppliesAttributes', 'expiryDate')) {
+                //Allow user to check for range of birthdate 
+                $startDate  = $_POST['selectExpiryDateStart'];
+                $endDate = $_POST['selectExpiryDateEnd'];
+            
+                //$startDate and $endDate should be of format Date 
+                //e.birthdate should be in format Date (yyyy/mm/dd)
+
+                if ($startDate != NULL && $endDate != NULL) {
+                    array_push($SQLwhereArray, "e.expiryDate >= to_date('$startDate', 'yyyy-mm-dd') AND e.expiryDate <= to_date('$endDate', 'yyyy-mm-dd')");
+                }   
+
+                array_push($SQLselectArray, "e.expiryDate");
+            }
+
+            if (isChecked('foodSuppliesAttributes', 'quantity')) {
+                $minQuantity = $_POST['selectQuantityStart'];
+                $maxQuantity = $_POST['selectQuantityEnd'];
+
+                if ($minQuantity != NULL && $maxQuantity != NULL) {
+                    array_push($SQLwhereArray, "e.quantity >= $minQuantity AND e.quantity <= $maxQuantity");
+                }
+
+                array_push($SQLselectArray, "e.quantity");
+            }
+
+            $attributes = [
+                // [htmlInputID, htmlSelectedAttribute, wherePrefix, selectExpression]
+                ['supplyID' , 'selectedSupplyID' , "e.supplyID="   , "e.supplyID"] , 
+                ['name'  , 'selectedName'  , "e.name="    , "e.name"]  , 
+                ['unit'   , 'selectedUnit'   , "e.unit="     , "e.unit"]   , 
+            ];
+
+            foreach ($attributes as $attribute) {
+                $htmlInputID = $attribute[0];
+                $htmlSelectedAttribute = $attribute[1];
+                $wherePrefix = $attribute[2];
+                $selectExpression = $attribute[3];
+
+                if(isChecked('foodSuppliesAttributes', $htmlInputID)) {
+                    //Allow user to check for specific sin number
+                    $attributeValue = $_POST[$htmlSelectedAttribute];
+                    if ($attributeValue != NULL) {
+                        array_push($SQLwhereArray, "$wherePrefix '$attributeValue'");
+                    }
+    
+                    array_push($SQLselectArray, $selectExpression);
+                }
+            }
+
+
+            //array_push($SQLwhereArray, "s.visitorID = e.visitorID");
+            $SQLselectString = implode(', ', array_filter($SQLselectArray));
+            $SQLwhereString = implode(' AND ', array_filter($SQLwhereArray));
+
+            if ($SQLselectString =='') {
+                echo 'No Attributes Selected';
+            } else  if ($SQLwhereString == '') {
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e");
+            } else {
+                // uncomment for debugging
+                // echo $SQLselectString;
+                // echo '<br/>';///
+                // echo $SQLwhereString;
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e WHERE $SQLwhereString");
+            }
+            printResult($result, "Selected Data for table $SQLfromString");
+
+        }
+        
+        function handleSelectEnclosuresRequest() {
+            global $db_conn;
+            $SQLselectArray = [];
+            $SQLwhereArray = [];
+            $SQLfromString = "Enclosures";
+
+
+            $attributes = [
+                // [htmlInputID, htmlSelectedAttribute, wherePrefix, selectExpression]
+                ['enclosureID' , 'selectedEnclosureID' , "e.enclosureID="   , "e.enclosureID"]
+            ];
+
+            foreach ($attributes as $attribute) {
+                $htmlInputID = $attribute[0];
+                $htmlSelectedAttribute = $attribute[1];
+                $wherePrefix = $attribute[2];
+                $selectExpression = $attribute[3];
+
+                if(isChecked('enclosureAttributes', $htmlInputID)) {
+                    //Allow user to check for specific sin number
+                    $attributeValue = $_POST[$htmlSelectedAttribute];
+                    if ($attributeValue != NULL) {
+                        array_push($SQLwhereArray, "$wherePrefix '$attributeValue'");
+                    }
+    
+                    array_push($SQLselectArray, $selectExpression);
+                }
+            }
+
+            if (isChecked('enclosureAttributes', 'name')) {
+                $name = $_POST['selectedName'];
+
+                if($name != 'Any') {
+                    array_push($SQLwhereArray, "e.name = '$name'");
+                }
+
+                array_push($SQLselectArray, "e.name");
+            }
+
+            if (isChecked('enclosureAttributes', 'squareFt')) {
+                $minQuantity = $_POST['selectSquareFtStart'];
+                $maxQuantity = $_POST['selectSquareFtEnd'];
+
+                if ($minQuantity != NULL && $maxQuantity != NULL) {
+                    array_push($SQLwhereArray, "e.squareFt >= $minQuantity AND e.squareFt <= $maxQuantity");
+                }
+
+                array_push($SQLselectArray, "e.squareFt");
+            }
+
+
+            if (isChecked('enclosureAttributes', 'type')) {
+                $type = $_POST['selectedType'];
+
+                if($type != 'Any') {
+                    array_push($SQLwhereArray, "e.type = '$type'");
+                }
+
+                array_push($SQLselectArray, "e.type");
+            }
+
+
+            array_push($SQLwhereArray, "s.squareFt = e.squareFt");
+            array_push($SQLwhereArray, "s.type = e.type");
+            array_push($SQLwhereArray, "b.type = s.type");
+            $SQLselectString = implode(', ', array_filter($SQLselectArray));
+            $SQLwhereString = implode(' AND ', array_filter($SQLwhereArray));
+
+            if ($SQLselectString =='') {
+                echo 'No Attributes Selected';
+            } else {
+                // uncomment for debugging
+                // echo $SQLselectString;
+                // echo '<br/>';
+                // echo $SQLwhereString;
+                $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e, EnclosureDimensions s, Biomes b WHERE $SQLwhereString");
+            }
+            printResult($result, "Selected Data for table $SQLfromString");
+        }
+
+        function handleSelectRequest() {
+            global $db_conn;
+
+            $SQLfromString = $_POST['tableType'];
+
+            ?>
+
+            <?php if ($SQLfromString == 'Employees') : ?>
+                <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+                    <input type="hidden" id="selectEmployeesRequest" name="selectEmployeesRequest">
+                    <label for="selectEmployeeTypeMenu">Select a Type of Employee:</label><br>
+                    <input type="radio" id="Feeders" name="employeeType" value="Feeders">
+                    <label for="Feeders">Feeders</label><br>
+                    <input type="radio" id="Keepers" name="employeeType" value="Keepers">
+                    <label for="Keepers">Keepers</label><br>
+                    <input type="radio" id="Trainers" name="employeeType" value="Trainers">
+                    <label for="Trainers">Trainers</label><br>
+                    <input type="radio" id="Veterinarians" name="employeeType" value="Veterinarians">
+                    <label for="Veterinarians">Veterinarians</label><br> 
+            
+                    <label for="selectEmployeeAttributesMenu">Select Attributes (Leave blank to allow for ANY value for an attribute):</label><br>
+                    <input type="checkbox" id="employeeID" name="employeeAttributes[]" value="employeeID">
+                    <label for="employeeID">EmployeeID</label>
+                    <input type="number" id="selectedEmployeeID" name="selectedEmployeeID" min="0" max="999999"><br>
+
+                    <input type="checkbox" id="address" name="employeeAttributes[]" value="address">
+                    <label for="address">Address (Input a partial or full address to narrow down search)</label>
+                    <input type="text" id="selectedAddress" name="selectedAddress"><br>
+
+                    <input type="checkbox" id="firstName" name="employeeAttributes[]" value="firstName">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="selectedFirstName" name="selectedFirstName"><br>
+
+                    <input type="checkbox" id="lastName" name="employeeAttributes[]" value="lastName">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="selectedLastName" name="selectedLastName"><br>
+
+                    <input type="checkbox" id="email" name="employeeAttributes[]" value="email">
+                    <label for="email">Email</label>
+                    <input type="text" id="selectedEmail" name="selectedEmail"><br>
+
+                    <input type="checkbox" id="phoneNumber" name="employeeAttributes[]" value="phoneNumber">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="selectedPhoneNumber" name="selectedPhoneNumber"><br>
+
+                    <input type="checkbox" id="sin" name="employeeAttributes[]" value="sin">
+                    <label for="sin">Social Insurance Number</label>
+                    <input type="number" id="selectedSIN" name="selectedSIN" min="000000000" max="999999999"><br>
+
+                    <input type="checkbox" id="birthDate" name="employeeAttributes[]" value="birthDate">
+                    <label for="birthDateStart">Birthday is Between</label>
+                    <input type="date" id="selectBirthdayStart" name="selectBirthdayStart" min="1900-01-01" 
+                    max="$date">
+                    <label for="birthDateEnd">and</label>
+                    <input type="date" id="selectBirthdayEnd" name="selectBirthdayEnd" min="1900-01-01" 
+                    max="$date"><br>
+                    <input type="submit" name="selectEmployees"></p>
+                </form>
+            <?php endif; ?>
+
+            <?php if ($SQLfromString == 'Visitors') : ?>
+                <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+                    <input type="hidden" id="selectVisitorsRequest" name="selectVisitorsRequest">
+                    <label for="selectVisitorsAttributesMenu">Select Attributes (Leave blank to allow for ANY value for an attribute):</label><br>
+                    <input type="checkbox" id="visitorID" name="visitorAttributes[]" value="visitorID">
+                    <label for="visitorID">VisitorID</label>
+                    <input type="number" id="selectedVisitorID" name="selectedVisitorID" min="0" max="999999"><br>
+
+                    <input type="checkbox" id="firstName" name="visitorAttributes[]" value="firstName">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="selectedFirstName" name="selectedFirstName"><br>
+
+                    <input type="checkbox" id="lastName" name="visitorAttributes[]" value="lastName">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="selectedLastName" name="selectedLastName"><br>
+
+                    <input type="checkbox" id="birthDate" name="visitorAttributes[]" value="birthDate">
+                    <label for="birthDateStart">Birthday is Between</label>
+                    <input type="date" id="selectBirthdayStart" name="selectBirthdayStart" min="1900-01-01" 
+                    max="$date">
+                    <label for="birthDateEnd">and</label>
+                    <input type="date" id="selectBirthdayEnd" name="selectBirthdayEnd" min="1900-01-01" 
+                    max="$date"><br>
+
+                    <input type="checkbox" id="address" name="visitorAttributes[]" value="address">
+                    <label for="address">Address (Input a partial or full address to narrow down search)</label>
+                    <input type="text" id="selectedAddress" name="selectedAddress"><br>
+
+                    <input type="checkbox" id="phoneNumber" name="visitorAttributes[]" value="phoneNumber">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="selectedPhoneNumber" name="selectedPhoneNumber"><br>
+
+                    <input type="checkbox" id="email" name="visitorAttributes[]" value="email">
+                    <label for="email">Email</label>
+                    <input type="text" id="selectedEmail" name="selectedEmail"><br>
+
+                    <input type="submit" name="selectVisitors">
+                </form>
+            <?php endif; ?>
+
+            <?php if ($SQLfromString == 'VisitorRecords') : ?>
+                <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+                    <input type="hidden" id="selectVisitorRecordsRequest" name="selectVisitorRecordsRequest">
+                    <label for="selectVisitorRecordsAttributesMenu">Select Attributes (Leave blank to allow for ANY value for an attribute):</label><br>
+                    <input type="checkbox" id="visitorID" name="visitorRecordsAttributes[]" value="visitorID">
+                    <label for="visitorID">VisitorID</label>
+                    <input type="number" id="selectedVisitorID" name="selectedVisitorID" min="0" max="999999"><br>
+
+                    <input type="checkbox" id="recordID" name="visitorRecordsAttributes[]" value="recordID">
+                    <label for="recordID">RecordID</label>
+                    <input type="number" id="selectedRecordID" name="selectedRecordID" min="0" max="999999"><br>
+
+                    <input type="checkbox" id="visitDate" name="visitorRecordsAttributes[]" value="visitDate">
+                    <label for="visitDateStart">Visit Date is Between</label>
+                    <input type="date" id="selectVisitDateStart" name="selectVisitDateStart" min="1900-01-01" 
+                    max="$date">
+                    <label for="visitDateEnd">and</label>
+                    <input type="date" id="selectVisitDateEnd" name="selectVisitDatesEnd" min="1900-01-01" 
+                    max="$date"><br>
+                    <input type="submit" name="selectVisitorRecords">
+                </form>
+            <?php endif; ?>
+
+            <?php if ($SQLfromString == 'FoodSupplies') : ?>
+                <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+                    <input type="hidden" id="selectFoodSuppliesRequest" name="selectFoodSuppliesRequest">
+                    <input type="checkbox" id="supplyID" name="foodSuppliesAttributes[]" value="supplyID">
+                    <label for="supplyID">SupplyID</label>
+                    <input type="number" id="selectedSupplyID" name="selectedSupplyID" min="0" max="999999"><br>
+
+                    <input type="checkbox" id="name" name="foodSuppliesAttributes[]" value="name">
+                    <label for="name">Name</label>
+                    <input type="text" id="selectedName" name="selectedName"><br>
+
+                    <input type="checkbox" id="expiryDate" name="foodSuppliesAttributes[]" value="expiryDate">
+                    <label for="expiryDateStart">Expiry Date is Between</label>
+                    <input type="date" id="selectExpiryDateStart" name="selectExpiryDateStart" min="1900-01-01" 
+                    max="$date">
+                    <label for="expiryDateEnd">and</label>
+                    <input type="date" id="selectExpiryDateEnd" name="selectExpiryDateEnd" min="1900-01-01" 
+                    max="$date"><br>
+
+                    <input type="checkbox" id="quantity" name="foodSuppliesAttributes[]" value="quantity">
+                    <label for="quantityStart">Quantity is Between</label>
+                    <input type="number" id="selectQuantityStart" name="selectQuantityStart" min="0" 
+                    max="999999">
+                    <label for="quantityEnd">and</label>
+                    <input type="number" id="selectQuantityEnd" name="selectQuantityEnd" min="0" 
+                    max="99999"><br>
+
+                    <input type="checkbox" id="unit" name="foodSuppliesAttributes[]" value="unit">
+                    <label for="unit">Unit</label>
+                    <input type="text" id="selectedUnit" name="selectedUnit"><br>
+
+                    <input type="submit" name="selectFoodSupplies">
+                </form>
+            <?php endif; ?>
+
+            <?php if ($SQLfromString == 'Enclosures') : ?>
+                <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
+                    <input type="hidden" id="selectEnclosuresRequest" name="selectEnclosuresRequest">
+                    <input type="checkbox" id="enclosureID" name="enclosureAttributes[]" value="enclosureID">
+                    <label for="enclosureID">EnclosureID</label>
+                    <input type="number" id="enclosureID" name="selectedEnclosureID" min="0" max="999999"><br>
+
+                    <input type="checkbox" id="name" name="enclosureAttributes[]" value="name">
+                    <label for="name">Name</label>
+                    <select name="selectedName" id="selectedName">
+                        <option value= "Any">Any</option>
+                        <option value= "Marine Animal Exhibit">Any</option>
+                        <option value= "Lion Enclosure">Lion Enclosure</option>
+                        <option value= "Small Animals ONLY">Small Animals ONLY</option>
+                        <option value= "All your favorite insects">All your favorite insects</option>
+                        <option value= "Whales and other cool fish">Whales and other cool fish</option>
+                        <option value= "Definitely tigers">Definitely tigers</option>
+                        <option value= "Penguins and a LOT of ice">Penguins and a LOT of ice</option>
+                        <option value= "Zebras, yep, Zebras">Zebras, yep, Zebras</option>
+                    </select><br>
+            
+                    <input type="checkbox" id="squareFt" name="enclosureAttributes[]" value="squareFt">
+                    <label for="squareFtStart">Square Feet is Between</label>
+                    <input type="number" id="selectSquareFtStart" name="selectSquareFtStart" min="0" 
+                    max="999999">
+                    <label for="squareFtEnd">ft<sup>2</sup> and</label>
+                    <input type="number" id="selectSquareFtEnd" name="selectSquareFtEnd" min="0" 
+                    max="99999">
+                    <label for="selectedSquareFtEnd">ft<sup>2</sup><br>
+
+                    <input type="checkbox" id="type" name="enclosureAttributes[]" value="type">
+                    <label for="type">Type</label>
+                    <select name="selectedType" id="selectedType">
+                        <option value="Any">Any</option>
+                        <option value="Water">Water</option>
+                        <option value="Savanna">Savanna</option>
+                        <option value="Jungle">Jungle</option>
+                        <option value="Ice">Ice</option>
+                        <option value="Plains">Plains</option>
+                        <option value="Grassland">Grassland</option>
+                        <option value="Mountain">Mountain</option>
+                        <option value="Forest">Forest</option>
+                    </select><br>
+
+                    <input type="submit" name="selectEnclosures">
+                </form>
+            <?php endif; ?>
+
+            <?php
+        }
+
         // Check whether the name and requestName exist in the array request ($_GET, $_POST, etc.)
         function requestValid(array $request, $name, $requestName) {
             return isset($request[$name]) && array_key_exists($requestName, $request);
@@ -951,6 +1480,21 @@
         }
         else if (requestValid($_GET, 'projectTuples', 'projectRequest')) {
             handleRequest('handleProjectRequest');
+        } 
+        else if(requestValid($_POST, 'selectEmployees', 'selectEmployeesRequest')) {
+            handleRequest('handleSelectEmployeesRequest');
+        }
+        else if (requestValid($_POST, 'selectVisitors', 'selectVisitorsRequest')) {
+            handleRequest('handleSelectVisitorsRequest');
+        }
+        else if (requestValid($_POST, 'selectVisitorRecords', 'selectVisitorRecordsRequest')) {
+            handleRequest('handleSelectVisitorRecordsRequest');
+        }
+        else if (requestValid($_POST, 'selectFoodSupplies', 'selectFoodSuppliesRequest')) {
+            handleRequest('handleSelectFoodSuppliesRequest');
+        }
+        else if (requestValid($_POST, 'selectEnclosures', 'selectEnclosuresRequest')) {
+            handleRequest('handleSelectEnclosuresRequest');
         }
 		?>
 	</body>
