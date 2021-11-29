@@ -111,14 +111,79 @@
 
         <hr />
 
-        <h2>Update Name in Animals - NOT DONE</h2>
+        <h2>Update an Employee</h2>
         <h4 class="query">Update Operation</h4>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
         <form method="POST" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            Old Name: <input type="text" name="oldName"> <br /><br />
-            New Name: <input type="text" name="newName"> <br /><br />
+            
+            <p>Choose which employee you want to update</p>
+            <select name="employeeID">
+                <?php
+                    include('environment.php');
+                    handleRequest('handleGetEmployeeNamesRequest');
+                ?>
+            </select>
+
+            <p>Choose what you want to change and provide the updated value</p>
+
+            <table class="tg">
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="firstName" name="updateAttributes[]" value="firstName">
+                    <label for="firstName">First name</label>
+                </td>
+                <td class="tg-0pky"><input type="text" name="newFirstName"></td>
+            </tr>
+
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="lastName" name="updateAttributes[]" value="lastName">
+                    <label for="lastName">Last name</label>
+                </td>
+                <td class="tg-0pky"><input type="text" name="newLastName"></td>
+            </tr>
+
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="address" name="updateAttributes[]" value="address">
+                    <label for="address">Address</label>
+                </td>
+                <td class="tg-0pky"><input type="text" name="newAddress"></td>
+            </tr>
+
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="email" name="updateAttributes[]" value="email">
+                    <label for="email">Email</label>
+                </td>
+                <td class="tg-0pky"><input type="email" name="newEmail"></td>
+            </tr>
+
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="phoneNumber" name="updateAttributes[]" value="phoneNumber">
+                    <label for="phoneNumber">Phone number</label>
+                </td>
+                <td class="tg-0pky"><input type="tel" name="newPhoneNumber" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"></td>
+            </tr>
+
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="sin" name="updateAttributes[]" value="sin">
+                    <label for="sin">Sin</label>
+                </td>
+                <td class="tg-0pky"><input type="text" name="newSin"></td>
+            </tr>
+
+            <tr>
+                <td class="tg-0pky">
+                    <input type="checkbox" id="birthDate" name="updateAttributes[]" value="birthDate">
+                    <label for="birthDate">Birth date</label>
+                </td>
+                <td class="tg-0pky"><input type="date" name="newBirthDate"></td>
+            </tr>
+            </table>
 
             <input type="submit" value="Update" name="updateSubmit"></p>
         </form>
@@ -233,6 +298,15 @@
         <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
             <input type="hidden" id="oldestAnimalPerBreedRequest" name="oldestAnimalPerBreedRequest">
             <input type="submit" name="oldestAnimalPerBreedTuples"></p>
+        </form>
+
+        <hr />
+
+        <h2>Find supplies that are low in stock and are eaten by more than 1 animal</h2>
+        <h4 class="query">Aggregation with Having Query</h4>
+        <form method="GET" action="zoo.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="aggregationWithHavingRequest" name="aggregationWithHavingRequest">
+            <input type="submit" name="aggregationWithHavingTuples"></p>
         </form>
 
         <hr />
@@ -354,7 +428,7 @@
         }
 
         function printResult($result, $message) { //prints results from a select statement
-            echo $message . "<br>";
+            echo "<br>" . $message . "<br>";
 
             // https://stackoverflow.com/questions/2970936/how-to-echo-out-table-rows-from-the-db-php
             echo("<table border='1'>");
@@ -416,6 +490,17 @@
             return false;
         }
 
+        function isCheckedPost($chkname, $value) {
+            if(!empty($_POST[$chkname])) {
+                foreach($_POST[$chkname] as $chkval) {
+                    if ($chkval == $value) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function isPhoneNumber($phoneNumber) {
             $length = strlen($phoneNumber);
             $newString = '';
@@ -443,12 +528,55 @@
         function handleUpdateRequest() {
             global $db_conn;
 
-            $old_name = $_POST['oldName'];
-            $new_name = $_POST['newName'];
+            $employeeID = $_POST['employeeID'];
+            $SQLSetArray = [];
+            $anyAttributeSet = false;
 
-            // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            $attributes = [
+                ['firstName'   , 'newFirstName'  , 'e.firstName=']  , 
+                ['lastName'    , 'newLastName'   , 'e.lastName=']   , 
+                ['address'     , 'newAddress'    , 'e.address=']    , 
+                ['email'       , 'newEmail'      , 'e.email=']      , 
+                ['phoneNumber' , 'newPhoneNumber', 'e.phoneNumber='], 
+                ['sin'         , 'newSin'        , 'e.sin=']        , 
+                ['birthDate'   , 'newBirthDate'  , 'e.birthDate=']  , 
+            ];
+
+            foreach ($attributes as $attribute) {
+                $htmlInputID = $attribute[0];
+                $htmlUpdateAttribute = $attribute[1];
+                $sqlAttribute = $attribute[2];
+
+                if(isCheckedPost('updateAttributes', $htmlInputID)) {
+                    $attributeValue = $_POST[$htmlUpdateAttribute];
+                    if ($attributeValue != NULL) {
+                        $anyAttributeSet = true;
+
+                        if ($htmlInputID=='birthDate') {
+                            array_push($SQLSetArray, "$sqlAttribute to_date('$attributeValue', 'yyyy-mm-dd')");
+                        } else {
+                            array_push($SQLSetArray, "$sqlAttribute '$attributeValue'");
+                        }
+                    }
+                }
+            }
+
+            if ($anyAttributeSet == false) {
+                echo "Please select some attributes to update and make sure values are specified.";
+                return;
+            }
+            $SQLSetString = implode(', ', array_filter($SQLSetArray));
+
+            $before = executePlainSQL("SELECT * from Employees ORDER BY employeeID");
+            printResult($before, "Before Update:");
+
+            executePlainSQL("UPDATE Employees e
+                SET $SQLSetString
+                WHERE e.employeeID = '$employeeID'");
             OCICommit($db_conn);
+
+            $after = executePlainSQL("SELECT * from Employees ORDER BY employeeID");
+            printResult($after, "After Update:");
         }
 
         function handleResetRequest() {
@@ -534,6 +662,15 @@
             while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
             {
                 echo "<option value=\" ". $row['ENCLOSUREID'] . " \">" . $row['NAME'] . "</option>";
+            }
+        }
+
+        function handleGetEmployeeNamesRequest() {
+            global $db_conn;
+            $result = executePlainSQL("SELECT employeeID, CONCAT(firstName, lastName) as name FROM Employees ORDER BY name");
+            while ($row = oci_fetch_array($result, OCI_RETURN_NULLS+OCI_ASSOC))
+            {
+                echo "<option value=\"". $row['EMPLOYEEID'] . " \">" . $row['NAME'] . "</option>";
             }
         }
 
@@ -736,6 +873,45 @@
 
             printResult($result,"Oldest Animal of Each Breed");
             printResult($allAges, "All Ages of Animals of Each Breed");
+        }
+
+        function handleAggregationWithHavingRequest() {
+            global $db_conn;
+
+            /*
+            For each supply, find those that are used by more than 1 animals
+            and the sum of how much the animals will eat is less than how much we have in stock for it
+            */
+            $result = executePlainSQL(
+                "SELECT m.supplyID, f.name, COUNT(DISTINCT m.animalID) as animalsThatEatThisSupply, SUM(m.amount) as totalNeededFromAnimals
+                FROM FoodSupplies f, MadeUpOf m
+                WHERE f.supplyID = m.supplyID
+                GROUP BY m.supplyID, f.name
+                HAVING COUNT(DISTINCT m.animalID) > 1
+                AND SUM(m.amount) > (SELECT quantity FROM FoodSupplies f1 WHERE f1.supplyID = m.supplyID)
+                ORDER BY m.supplyID, f.name"
+            );
+
+            printResult($result, "Aggregation with HAVING query");
+
+            $result = executePlainSQL(
+                "SELECT f.supplyID, f.name, f.quantity, SUM(m.amount) as totalNeededFromAnimals
+                FROM FoodSupplies f, MadeUpOf m
+                WHERE f.supplyID = m.supplyID
+                GROUP BY f.supplyID, f.name, f.quantity
+                ORDER BY f.supplyID, f.name"
+            );
+
+            printResult($result, "Supplies - amount in stock and amount needed by all animals");
+
+            $result = executePlainSQL(
+                "SELECT m.supplyID, f.name, m.animalID, m.amount
+                FROM FoodSupplies f, MadeUpOf m
+                WHERE f.supplyID = m.supplyID
+                ORDER BY m.supplyID, f.name, m.animalID, m.amount"
+            );
+
+            printResult($result, "Supplies - what each animal eats and how much they need");
         }
 
         function handleNestedAggregationRequest() {
@@ -1422,6 +1598,9 @@
         }
         else if (requestValid($_GET, 'selectEnclosures', 'selectEnclosuresRequest')) {
             handleRequest('handleSelectEnclosuresRequest');
+        }
+        else if (requestValid($_GET, 'aggregationWithHavingTuples', 'aggregationWithHavingRequest')) {
+            handleRequest('handleAggregationWithHavingRequest');
         }
 		?>
 	</body>
