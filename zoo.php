@@ -967,6 +967,7 @@
                 echo 'No Attributes Selected';
             } else  if ($SQLwhereString == '') {
                 $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e");
+                printResult($result, "Selected Data for table $SQLfromString");
             } else {
                 // uncomment for debugging
                 // echo $SQLselectString;
@@ -1096,6 +1097,7 @@
                 echo 'No Attributes Selected';
             } else  if ($SQLwhereString == '') {
                 $result = executePlainSQL("SELECT $SQLselectString FROM $SQLfromString e");
+                printResult($result, "Selected Data for table $SQLfromString");
             } else {
                 // uncomment for debugging
                 // echo $SQLselectString;
