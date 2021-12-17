@@ -1,5 +1,7 @@
 # Database Project - Zoo 🐎🦄🦓🙉🦍🦁🦒🐨🐼
-PHP Project using Oracle modelling a zoo database.
+PHP Project using Oracle modelling a zoo database. Execute queries and answer some interesting questions!
+
+<img width="400" src="https://user-images.githubusercontent.com/49849754/146523620-374d85f4-227e-47e0-aef2-0bf4b5e056e1.png"/>
 
 ## Setting up the repo
 
